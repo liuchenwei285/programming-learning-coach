@@ -5,7 +5,7 @@ description: Run a closed-loop programming study coach from the learner's own no
 
 # Programming Learning Coach（编程学习教练）
 
-把学习者的笔记变成一次完整练习闭环：**接收笔记 → 分析进度 → 确认范围 → 出题 → 等提交 → 批改 →
+把学习者的笔记变成一次完整练习闭环：**接收笔记 → 分析进度 → 自动锁定范围 → 出题 → 等提交 → 批改 →
 练习文档 → 推荐精读 → 精读文档 → 更新档案**。不限编程语言。
 
 ## 0. 开工前必须确认（缺一项就先问，不要猜）
@@ -25,8 +25,8 @@ description: Run a closed-loop programming study coach from the learner's own no
 | # | 阶段 | 做什么 | 命令 |
 | :-- | :-- | :-- | :-- |
 | 1 | `intake` | 解析笔记（按文件哈希缓存，笔记没变就跳过） | `plc_cli.py prepare --notes <路径> --sid <sid> --records work/records.json --cache-dir .plc/cache` |
-| 2 | `analysis` | 进度分析：T1~T3 直接可用、T4 歧义项合并成一张表 | 同上（`prepare` 一次跑完 1+2） |
-| 3 | `scope_confirmed` | `prepare` 自动锁定范围：T1~T3 可用、T4 按未学排除；无需人工确认 | `plc_cli.py prepare …`（`scope-confirm` 仅为兼容旧流程保留） |
+| 2 | `analysis` | 进度分析：T1~T3 直接可用、T4 弱证据项一律按未学排除 | 同上（`prepare` 一次跑完 1+2） |
+| 3 | `scope_confirmed` | `prepare` 自动锁定范围：T1~T3 可用、T4 按未学排除；无需人工确认，新出现的弱证据项只提示一行 `以下按未学排除：……` | `plc_cli.py prepare …`（`scope-confirm` 仅为兼容旧流程保留，不是必要步骤） |
 | 4 | `questioning` | 出题（答案自动进 `.private/`） | `plc_cli.py questions build --questions work/q.json --records … --sid <sid>` |
 | 5 | `awaiting_submission` | **停下来等提交**（逐题 / 一次性 / 申请提示） | 逐题 `plc_cli.py submit --sid <sid> --qid Q1 --file 答案.c`；一次性 `plc_cli.py submit-dir --sid <sid> --dir 我的答案/`（文件名即题号，如 `Q1.c`）；提示 `plc_cli.py hint --sid <sid> --qid Q1 --level L1`（逐级，不能跳级，永不给完整答案） |
 | 6 | `grading` | 批改（沙箱跑用例 + 九段结构） | `plc_cli.py grade --sid <sid> --records … --notes work/notes.json --out work/grading.json` |
@@ -123,16 +123,24 @@ description: Run a closed-loop programming study coach from the learner's own no
 
 ```
 programming-learning-coach/
-├── SKILL.md                        # 本文件：流程 + 35 条硬规则
+├── SKILL.md                        # 本文件：流程 + 硬规则
 ├── references/                     # 出题(含题型表)/批改/掌握度/提示/解析/精读/Vault 规则 + 知识点词库
 ├── scripts/
 │   ├── plc_cli.py                  # 统一入口
-│   ├── session_store.py            # 阶段门 + 答案隔离        ├── questions.py  # 题型/组卷/不超纲/查重/泄漏扫描
-│   ├── parse_notes.py  glossary.py  analyze.py  mastery.py    # 解析 → 词库 → 进度分析 → 五级掌握度
-│   ├── sandbox_run.py  grading.py  reading.py  verify_sources.py  # 沙箱 / 批改 / 精读A(自编) / 精读B(开源)
-│   └── render_md.py  vault_write.py                            # 文档生成 / Vault 安全写入
+│   ├── session_store.py            # 阶段门 + 答案隔离
+│   ├── questions.py                # 题型/组卷/不超纲/查重/泄漏扫描
+│   ├── parse_notes.py              # 笔记解析（md/txt/docx/pdf/图片）
+│   ├── glossary.py                 # 知识点词库匹配
+│   ├── analyze.py                  # 证据分级与范围自动锁定
+│   ├── mastery.py                  # 五级掌握度
+│   ├── sandbox_run.py              # 沙箱运行
+│   ├── grading.py                  # 批改
+│   ├── reading.py                  # 精读 A（自编程序）
+│   ├── verify_sources.py           # 精读 B（开源片段验证）
+│   ├── render_md.py                # 文档生成
+│   └── vault_write.py              # Vault 安全写入
 ├── templates/                      # practice.md、code_reading.md（自编）、code_reading_opensource.md（开源）
-└── tests/                          # run_tests.py + 12 组测试 + fixtures/（可直接跑的示例题库与精读）
+└── tests/                          # run_tests.py + 12 个测试文件 + fixtures/（可直接跑的示例题库与精读）
 ```
 
 `tests/fixtures/` 里的 `questions.example.json`（10 题完整卷）、`reading.example.json`（10 篇精读）、

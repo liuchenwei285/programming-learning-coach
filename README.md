@@ -116,7 +116,7 @@ python scripts/plc_cli.py vault archive --name 学习进度.md --body body.md --
 
 ```text
 programming-learning-coach/
-├── SKILL.md                  # Skill 触发描述与流程说明（存在历史文档债，见下）
+├── SKILL.md                  # Skill 触发描述与十阶段流程说明
 ├── config.json               # Vault 路径、语言、题量、难度与范围策略
 ├── references/               # 出题、批改、掌握度、提示、解析、精读、Vault 规则
 ├── scripts/
@@ -142,11 +142,11 @@ cd programming-learning-coach
 python tests/run_tests.py
 ```
 
-【已核实】2026-11-16 在 Windows 上运行结果为：共 240 个用例，通过 234，失败 1，跳过 5。失败项是 `test_pdf_degrades_honestly`，因为降级提示不含断言期望的「降级」二字；5 个跳过项是联网验证用例，受本机网络限制触发 `WinError 10013`。这不等于全部测试通过，使用前应在自己的环境重跑。
+【已核实】2026-11-16 在 Windows 上运行结果为：共 240 个用例，通过 235，失败 0，跳过 5。5 个跳过项是联网验证用例，受本机网络限制触发 `WinError 10013`，属于环境限制而非用例失败。在自己的环境重跑时结果可能不同。
 
 ## 已知文档债
 
-`SKILL.md` 与少数注释仍保留 v2 时代措辞：比如「Vault 必须问」「T4 合并成表确认」「需要手动 `scope-confirm`」「默认推荐真实开源项目」。这些描述已落后于 v3 实现；以本 README、`scripts/plc_cli.py` 和 `tests/test_14_v3_flow.py` 为准。`scope-confirm` 现在只为兼容旧流程保留，不是必要步骤。
+本仓库的 `SKILL.md` 已与 v3 实现对齐：范围由 `prepare` 自动锁定，弱证据项按未学排除，`scope-confirm` 只为兼容旧流程保留、不是必要步骤。若你从更早的副本迁移过来，请以本 README、`scripts/plc_cli.py` 和 `tests/test_14_v3_flow.py` 为准。
 
 ## 安全边界
 

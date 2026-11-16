@@ -86,7 +86,7 @@ def parse_pdf(path: Path) -> tuple[str | None, str]:
     except ImportError:
         pass
     except Exception as e:  # 文件损坏等
-        return None, f"pypdf 解析失败: {e}"
+        return None, f"pypdf 解析失败，已降级为不解析该 PDF 正文: {e}"
     try:
         import PyPDF2  # type: ignore
         reader = PyPDF2.PdfReader(str(path))
@@ -94,7 +94,7 @@ def parse_pdf(path: Path) -> tuple[str | None, str]:
     except ImportError:
         pass
     except Exception as e:
-        return None, f"PyPDF2 解析失败: {e}"
+        return None, f"PyPDF2 解析失败，已降级为不解析该 PDF 正文: {e}"
     try:
         from pdfminer.high_level import extract_text  # type: ignore
         return extract_text(str(path)), "pdfminer"
@@ -102,7 +102,7 @@ def parse_pdf(path: Path) -> tuple[str | None, str]:
         return None, ("未安装 PDF 解析库（pip install pypdf），已降级：不解析该 PDF 正文。"
                       "可改为把内容导出为 md/txt，或把关键页截图发给我由模型直接阅读。")
     except Exception as e:
-        return None, f"pdfminer 解析失败: {e}"
+        return None, f"pdfminer 解析失败，已降级为不解析该 PDF 正文: {e}"
 
 
 def collect_inputs(paths: list[str], limit: int = 500) -> list[Path]:
