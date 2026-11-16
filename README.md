@@ -6,16 +6,35 @@
 
 ## 安装
 
-把整个 `programming-learning-coach/` 目录放到 Codex skills 目录，然后重启 Codex 让它发现新技能：
+Codex 从以下目录发现 Skill（任选其一，推荐第一个）：
 
-```bash
-# macOS / Linux
-git clone https://github.com/liuchenwei285/programming-learning-coach.git \
-  ~/.codex/skills/programming-learning-coach
+- `%USERPROFILE%\.codex\skills\programming-learning-coach\`
+- `%USERPROFILE%\.agents\skills\programming-learning-coach\`
 
-# Windows PowerShell
-git clone https://github.com/liuchenwei285/programming-learning-coach.git \
-  "$env:USERPROFILE\.codex\skills\programming-learning-coach"
+要求：目录里直接就是 `SKILL.md`（不要多套一层文件夹）。
+
+### 方式一：git clone（推荐，后续可直接 git pull 更新）
+
+```powershell
+git clone https://github.com/liuchenwei285/programming-learning-coach.git "$env:USERPROFILE\.codex\skills\programming-learning-coach"
+```
+
+### 方式二：下载 ZIP 手动安装
+
+1. 在仓库页点 **Code → Download ZIP** 并解压；
+2. 把解压出来的 `programming-learning-coach` 整个文件夹移动到上面任一目录；
+3. 确认该目录下直接就是 `SKILL.md`、`scripts\`、`references\`、`templates\`、`tests\`。
+
+### 方式三：在 Codex 会话里让我装
+
+把仓库地址发给 Codex，说「把这个 Skill 装到本机」：会自动 clone 到正确位置并跑一遍测试。
+
+### 更新到新版本
+
+```powershell
+cd "$env:USERPROFILE\.codex\skills\programming-learning-coach"
+git pull
+python tests\run_tests.py    # 可选：更新后跑一遍测试
 ```
 
 依赖：
@@ -24,7 +43,7 @@ git clone https://github.com/liuchenwei285/programming-learning-coach.git \
 - `pypdf`：解析 PDF 笔记；缺失时 PDF 走降级路径并在输出里明确标注。
 - `gcc` / `g++`：C/C++ 答案的沙箱编译运行；缺失时改为静态审查。
 
-装好后编辑 `config.json`，把 `vault` 改成自己的 Obsidian Vault 路径（必须是本机真实存在且可写的目录）：
+装完后编辑 `config.json`，把 `vault` 改成自己的 Obsidian Vault 路径（必须是本机真实存在且可写的目录）：
 
 ```json
 {
@@ -40,6 +59,8 @@ git clone https://github.com/liuchenwei285/programming-learning-coach.git \
 Windows 路径写在 JSON 里要把反斜杠转义，例如 `"C:\\Notes\\Vault"`。
 
 可选设置 `GITHUB_TOKEN`，提高精读模式 B 的 GitHub API 配额；未设置也能用，会如实标注验证状态。
+
+装完**重启一次 Codex**，然后把笔记发给它说「按我的笔记练习」即可触发。
 
 ## 当前 v3 行为
 

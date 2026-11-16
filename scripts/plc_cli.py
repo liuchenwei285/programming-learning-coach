@@ -3,14 +3,13 @@
 """programming-learning-coach 统一入口。
 
 流程（严格按顺序，阶段门由 session_store 强制，跳步会被拒绝）：
-  prepare(解析+分析+范围表) -> scope-confirm -> questions(固定10题) -> submit[/hint]
+  prepare(解析+分析+自动锁定范围) -> questions(固定10题) -> submit[/hint]
       -> grade-render(批改+练习文档) -> reading(自编精读,逐篇编译运行) 或 verify(开源片段)
       -> render reading -> archive
 
 用法：
   python plc_cli.py prepare --notes <笔记路径> --sid s1 --records rec.json
   python plc_cli.py refs --stage questioning     # 本阶段只需要读哪些 references
-  python plc_cli.py scope-confirm --sid s1 --records rec.json --analysis analysis.json --auto
   python plc_cli.py questions build --questions q.json --records rec.json --sid s1
   python plc_cli.py submit --sid s1 --qid Q1 --file 答案.c
   python plc_cli.py submit-dir --sid s1 --dir 我的答案/          # 一次性提交，文件名即题号
@@ -18,6 +17,7 @@
   python plc_cli.py grade-render --sid s1 --records rec.json --notes n.json --out 练习.md
   python plc_cli.py status --sid s1 / next --sid s1              # 进度与耗时
   python plc_cli.py <subcommand> [args...]                       # 子命令参数原样传给对应脚本
+  python plc_cli.py scope-promote --records rec.json --kp <知识点> # 弱证据项改为已学，下一轮生效
 """
 from __future__ import annotations
 
