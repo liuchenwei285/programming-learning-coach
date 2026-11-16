@@ -8,6 +8,8 @@ import contextlib
 import io
 import json
 import unittest
+from pathlib import Path
+from unittest import mock
 
 import tutil
 import analyze as A
@@ -18,6 +20,36 @@ import plc_cli
 import render_md as R
 import session_store as S
 import vault_write as V
+
+
+class TestConfigNotTracked(unittest.TestCase):
+    """config.json 含本机 Vault 路径，不能进版本库；缺失时要能从 example 自举。"""
+
+    def test_config_json_is_gitignored(self):
+        root = Path(CFG.CONFIG_PATH).parent
+        gitignore = root / ".gitignore"
+        self.assertTrue(gitignore.exists(), "仓库必须有 .gitignore")
+        lines = [l.strip() for l in gitignore.read_text(encoding="utf-8").splitlines()]
+        self.assertIn("config.json", lines, "config.json 必须被 .gitignore 排除")
+
+    def test_example_config_keeps_placeholder_vault(self):
+        self.assertTrue(CFG.EXAMPLE_PATH.exists(), "仓库必须保留 config.example.json")
+        data = json.loads(CFG.EXAMPLE_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(data["vault"], CFG.FALLBACK_VAULT,
+                         "模板里的 Vault 必须是占位符，不能是真实路径")
+
+    def test_ensure_config_creates_from_example(self):
+        work = tutil.tmp("plc-cfg-")
+        try:
+            target = work / "config.json"
+            with mock.patch.object(CFG, "CONFIG_PATH", target), \
+                 mock.patch.object(CFG, "EXAMPLE_PATH", CFG.EXAMPLE_PATH):
+                CFG.ensure_config()
+            self.assertTrue(target.exists(), "config.json 缺失时应自动从模板生成")
+            self.assertEqual(json.loads(target.read_text(encoding="utf-8"))["vault"],
+                             CFG.FALLBACK_VAULT)
+        finally:
+            tutil.rm(work)
 
 
 class TestVaultRemembered(unittest.TestCase):

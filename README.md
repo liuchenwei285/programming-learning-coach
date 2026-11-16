@@ -43,7 +43,7 @@ python tests\run_tests.py    # 可选：更新后跑一遍测试
 - `pypdf`：解析 PDF 笔记；缺失时 PDF 走降级路径并在输出里明确标注。
 - `gcc` / `g++`：C/C++ 答案的沙箱编译运行；缺失时改为静态审查。
 
-装完后编辑 `config.json`，把 `vault` 改成自己的 Obsidian Vault 路径（必须是本机真实存在且可写的目录）：
+首次运行时会自动从 `config.example.json` 生成一份 `config.json`。把里面的 `vault` 改成自己的 Obsidian Vault 路径（必须是本机真实存在且可写的目录）：
 
 ```json
 {
@@ -58,6 +58,8 @@ python tests\run_tests.py    # 可选：更新后跑一遍测试
 
 Windows 路径写在 JSON 里要把反斜杠转义，例如 `"C:\\Notes\\Vault"`。
 
+`config.json` 已被 `.gitignore` 排除，**不会**被推送到 GitHub，你的 Vault 路径不会外泄。仓库里只保留占位符版本的 `config.example.json`。
+
 可选设置 `GITHUB_TOKEN`，提高精读模式 B 的 GitHub API 配额；未设置也能用，会如实标注验证状态。
 
 装完**重启一次 Codex**，然后把笔记发给它说「按我的笔记练习」即可触发。
@@ -66,7 +68,7 @@ Windows 路径写在 JSON 里要把反斜杠转义，例如 `"C:\\Notes\\Vault"`
 
 这份实现以 `scripts/plc_cli.py` 和测试中的实际行为为准，核心口径是 **「问一次、记住、之后直接出题」**：
 
-- Obsidian Vault 路径记在 `config.json`；只有路径不存在、不是目录或不可写时才报错询问。改路径直接编辑配置。
+- Obsidian Vault 路径记在 `config.json`（不入库）；只有路径不存在、不是目录或不可写时才报错询问。改路径直接编辑配置。
 - `prepare` 一次完成建会话、笔记解析、进度分析和范围自动锁定；缓存命中时跳过重复解析与分析。
 - T1–T3 强证据知识点自动纳入出题范围；T4 弱证据知识点一律按「未学习」排除，不再弹确认表，也不再要求 `scope-confirm`。
 - 新出现的弱证据项只给一行提示：`以下按未学排除：……`。学习者明确说「改为已学」后，用 `scope-promote` 在下一轮纳入。
@@ -138,7 +140,7 @@ python scripts/plc_cli.py vault archive --name 学习进度.md --body body.md --
 ```text
 programming-learning-coach/
 ├── SKILL.md                  # Skill 触发描述与十阶段流程说明
-├── config.json               # Vault 路径、语言、题量、难度与范围策略
+├── config.example.json       # 配置模板（config.json 由首次运行自动生成，不入库）
 ├── references/               # 出题、批改、掌握度、提示、解析、精读、Vault 规则
 ├── scripts/
 │   ├── plc_cli.py            # 统一入口与十阶段命令

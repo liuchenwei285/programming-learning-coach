@@ -3,22 +3,41 @@
 """持久化配置：Vault 路径、默认语言、题量等。
 
 原则：Vault 路径**问一次、记住**。只有路径不存在或不可写时才报错询问。
+
+config.json 不进版本库（.gitignore 已排除），避免把本机 Vault 路径推到远端。
+首次运行时若 config.json 不存在，会从 config.example.json 自动生成一份。
 """
 from __future__ import annotations
 
 import json
 import os
+import shutil
 import tempfile
 from pathlib import Path
 
 CONFIG_PATH = Path(__file__).resolve().parent.parent / "config.json"
+EXAMPLE_PATH = Path(__file__).resolve().parent.parent / "config.example.json"
 FALLBACK_VAULT = "<Vault 路径>"
 DEFAULTS = {"vault": FALLBACK_VAULT, "language": "c", "question_count": 10,
             "difficulty_order": "asc", "scope_policy": "t1_t3_usable_t4_excluded"}
 
 
+def ensure_config() -> Path:
+    """保证 config.json 存在：不存在就从 config.example.json 复制一份。"""
+    if CONFIG_PATH.exists():
+        return CONFIG_PATH
+    if EXAMPLE_PATH.exists():
+        try:
+            shutil.copyfile(EXAMPLE_PATH, CONFIG_PATH)
+        except OSError:
+            pass
+    return CONFIG_PATH
+
+
 def load(path: str | Path | None = None) -> dict:
     p = Path(path) if path else CONFIG_PATH
+    if path is None:
+        ensure_config()
     data = dict(DEFAULTS)
     if p.exists():
         try:
