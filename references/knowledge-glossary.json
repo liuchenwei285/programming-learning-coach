@@ -1,0 +1,1342 @@
+{
+  "version": 2,
+  "comment": "知识点词库 v2。names=强别名（可支撑 T1~T3 证据，直接可用）；weak_names=弱别名（只能产生 T4 弱证据，进歧义表由学习者一次性确认）。kp 用于 Obsidian [[双向链接]]；core=true 表示核心知识点，笔记没出现时判为『未学习』（禁止作为解题必要条件）。",
+  "entries": [
+    {
+      "id": "c_basic_structure",
+      "kp": "C程序基本结构",
+      "lang": "c",
+      "core": true,
+      "prereq": [],
+      "names": [
+        "main函数",
+        "int main",
+        "#include",
+        "头文件",
+        "程序结构"
+      ],
+      "tags": [
+        "基础"
+      ],
+      "weak_names": [
+        "编译"
+      ]
+    },
+    {
+      "id": "c_compile",
+      "kp": "编译与运行",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_basic_structure"
+      ],
+      "names": [
+        "gcc",
+        "链接",
+        "可执行文件",
+        ".exe"
+      ],
+      "tags": [
+        "基础"
+      ],
+      "weak_names": [
+        "编译",
+        "预处理"
+      ]
+    },
+    {
+      "id": "c_printf",
+      "kp": "printf输出",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_basic_structure"
+      ],
+      "names": [
+        "printf",
+        "格式化输出",
+        "占位符",
+        "putchar",
+        "puts"
+      ],
+      "tags": [
+        "输入输出"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_scanf",
+      "kp": "scanf输入",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_printf"
+      ],
+      "names": [
+        "scanf",
+        "输入",
+        "getchar",
+        "取地址符"
+      ],
+      "tags": [
+        "输入输出"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_format_specifier",
+      "kp": "格式占位符",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_printf"
+      ],
+      "names": [
+        "%d",
+        "%f",
+        "%c",
+        "%s",
+        "%zu",
+        "%lf",
+        "%x",
+        "%o",
+        "格式控制符",
+        "占位符"
+      ],
+      "tags": [
+        "输入输出"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_data_type",
+      "kp": "数据类型",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_basic_structure"
+      ],
+      "names": [
+        "数据类型",
+        "基本类型"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": [
+        "int",
+        "char",
+        "float",
+        "double",
+        "short",
+        "long"
+      ]
+    },
+    {
+      "id": "c_sizeof",
+      "kp": "sizeof运算符",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_data_type"
+      ],
+      "names": [
+        "sizeof",
+        "字节大小",
+        "占几个字节"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_signed_unsigned",
+      "kp": "有符号与无符号",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_data_type"
+      ],
+      "names": [
+        "signed",
+        "unsigned",
+        "无符号",
+        "有符号",
+        "取值范围",
+        "溢出"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_variable",
+      "kp": "变量",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_data_type"
+      ],
+      "names": [
+        "变量",
+        "标识符",
+        "命名规则",
+        "定义变量",
+        "变量的定义",
+        "变量定义"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": [
+        "初始化"
+      ]
+    },
+    {
+      "id": "c_constant",
+      "kp": "常量",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_variable"
+      ],
+      "names": [
+        "常量",
+        "const",
+        "#define",
+        "宏定义",
+        "字面量",
+        "极限值常量"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_operator",
+      "kp": "运算符",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_variable"
+      ],
+      "names": [
+        "运算符",
+        "算术运算",
+        "赋值运算符",
+        "优先级",
+        "自增",
+        "自减",
+        "++",
+        "--",
+        "算术操作符",
+        "赋值操作符",
+        "单目操作符",
+        "操作符"
+      ],
+      "tags": [
+        "运算"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_integer_division",
+      "kp": "整数除法与取余",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_operator"
+      ],
+      "names": [
+        "整除",
+        "取余",
+        "取模",
+        "%运算符",
+        "整数除法",
+        "取余数"
+      ],
+      "tags": [
+        "运算"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_type_conversion",
+      "kp": "类型转换",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_data_type",
+        "c_operator"
+      ],
+      "names": [
+        "隐式转换",
+        "强制类型转换",
+        "类型转换",
+        "自动转换",
+        "精度丢失"
+      ],
+      "tags": [
+        "运算"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_number_base",
+      "kp": "进制与位表示",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_data_type"
+      ],
+      "names": [
+        "二进制",
+        "八进制",
+        "十进制",
+        "十六进制",
+        "进制",
+        "补码",
+        "原码",
+        "反码"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_bitwise",
+      "kp": "位运算",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_number_base"
+      ],
+      "names": [
+        "位运算",
+        "按位与",
+        "按位或",
+        "异或",
+        "左移",
+        "右移",
+        "&",
+        "|",
+        "^",
+        "<<",
+        ">>"
+      ],
+      "tags": [
+        "运算"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_char_ascii",
+      "kp": "字符与ASCII",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_data_type"
+      ],
+      "names": [
+        "ASCII",
+        "字符",
+        "单引号",
+        "字符常量",
+        "转义字符"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_escape",
+      "kp": "转义字符",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_char_ascii"
+      ],
+      "names": [
+        "转义",
+        "\\n",
+        "\\t",
+        "\\\\",
+        "换行符"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_if",
+      "kp": "if分支",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_operator"
+      ],
+      "names": [
+        "if",
+        "else",
+        "if-else",
+        "分支",
+        "条件判断",
+        "else if",
+        "if语句",
+        "嵌套if",
+        "嵌套判断"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_switch",
+      "kp": "switch语句",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_if"
+      ],
+      "names": [
+        "switch",
+        "case",
+        "default",
+        "break",
+        "多分支"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_relational_logic",
+      "kp": "关系与逻辑运算",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_operator"
+      ],
+      "names": [
+        "关系运算",
+        "逻辑运算",
+        "&&",
+        "||",
+        "!",
+        "短路",
+        "布尔",
+        "true",
+        "false",
+        "关系操作符",
+        "逻辑操作符"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_ternary",
+      "kp": "三目运算符",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_if"
+      ],
+      "names": [
+        "三目",
+        "条件运算符",
+        "?:",
+        "三元运算符",
+        "条件操作符"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_for",
+      "kp": "for循环",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_if"
+      ],
+      "names": [
+        "for循环",
+        "循环次数",
+        "for 循环",
+        "循环结构"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": [
+        "for",
+        "循环",
+        "遍历"
+      ]
+    },
+    {
+      "id": "c_while",
+      "kp": "while循环",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_if"
+      ],
+      "names": [
+        "do-while",
+        "当型循环",
+        "直到型循环",
+        "while循环",
+        "while 循环",
+        "循环结构"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": [
+        "while"
+      ]
+    },
+    {
+      "id": "c_loop_control",
+      "kp": "break与continue",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_for"
+      ],
+      "names": [
+        "break",
+        "continue",
+        "跳出循环",
+        "跳过本次",
+        "goto"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_nested_loop",
+      "kp": "嵌套循环",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_for"
+      ],
+      "names": [
+        "嵌套循环",
+        "双重循环",
+        "二重循环",
+        "多重循环",
+        "循环嵌套"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": [],
+      "note": "刻意不把『嵌套』列为别名：学习者笔记里的『嵌套』指的是嵌套 if，加进来会把未学的嵌套循环误判为已学"
+    },
+    {
+      "id": "c_array",
+      "kp": "一维数组",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_for"
+      ],
+      "names": [
+        "一维数组",
+        "数组初始化",
+        "int a["
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": [
+        "数组",
+        "下标"
+      ]
+    },
+    {
+      "id": "c_array2d",
+      "kp": "二维数组",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_array"
+      ],
+      "names": [
+        "二维数组",
+        "矩阵",
+        "多行多列"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_string",
+      "kp": "字符串",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_array"
+      ],
+      "names": [
+        "字符串",
+        "char数组",
+        "\\0",
+        "结束符",
+        "string.h",
+        "strlen",
+        "strcpy",
+        "strcmp",
+        "strcat"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_function",
+      "kp": "函数",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_if"
+      ],
+      "names": [
+        "形参",
+        "实参",
+        "函数声明",
+        "函数定义",
+        "函数调用",
+        "形参和实参"
+      ],
+      "tags": [
+        "函数"
+      ],
+      "weak_names": [
+        "return",
+        "返回值",
+        "函数"
+      ]
+    },
+    {
+      "id": "c_function_scope",
+      "kp": "作用域与生命周期",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_function"
+      ],
+      "names": [
+        "作用域",
+        "局部变量",
+        "全局变量",
+        "static",
+        "静态变量",
+        "生命周期",
+        "extern"
+      ],
+      "tags": [
+        "函数"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_recursion",
+      "kp": "递归",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_function"
+      ],
+      "names": [
+        "递归",
+        "递归调用",
+        "递归出口",
+        "阶乘",
+        "斐波那契"
+      ],
+      "tags": [
+        "函数"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_pointer",
+      "kp": "指针基础",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_array",
+        "c_function"
+      ],
+      "names": [
+        "&",
+        "*",
+        "解引用",
+        "空指针",
+        "NULL",
+        "野指针",
+        "指针变量"
+      ],
+      "tags": [
+        "指针"
+      ],
+      "weak_names": [
+        "地址",
+        "指针"
+      ]
+    },
+    {
+      "id": "c_pointer_array",
+      "kp": "指针与数组",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_pointer"
+      ],
+      "names": [
+        "指针数组",
+        "数组指针",
+        "指针运算",
+        "p+1",
+        "下标与指针"
+      ],
+      "tags": [
+        "指针"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_pointer_function",
+      "kp": "指针与函数",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_pointer",
+        "c_function"
+      ],
+      "names": [
+        "指针作参数",
+        "地址传递",
+        "函数指针",
+        "指针返回值"
+      ],
+      "tags": [
+        "指针"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_memory",
+      "kp": "内存区域与动态分配",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_pointer"
+      ],
+      "names": [
+        "全局区",
+        "常量区",
+        "malloc",
+        "calloc",
+        "realloc",
+        "free",
+        "内存泄漏",
+        "动态内存"
+      ],
+      "tags": [
+        "内存"
+      ],
+      "weak_names": [
+        "栈",
+        "堆"
+      ]
+    },
+    {
+      "id": "c_struct",
+      "kp": "结构体",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_array"
+      ],
+      "names": [
+        "struct",
+        "结构体",
+        "结构体数组",
+        "结构体指针",
+        "->"
+      ],
+      "tags": [
+        "自定义类型"
+      ],
+      "weak_names": [
+        "成员"
+      ]
+    },
+    {
+      "id": "c_union_enum",
+      "kp": "联合体与枚举",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_struct"
+      ],
+      "names": [
+        "union",
+        "联合体",
+        "enum",
+        "枚举",
+        "typedef"
+      ],
+      "tags": [
+        "自定义类型"
+      ],
+      "weak_names": [
+        "类型别名"
+      ]
+    },
+    {
+      "id": "c_file_io",
+      "kp": "文件读写",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_pointer",
+        "c_struct"
+      ],
+      "names": [
+        "fopen",
+        "fclose",
+        "fscanf",
+        "fprintf",
+        "fread",
+        "fwrite",
+        "文件操作",
+        "fgets",
+        "fputs"
+      ],
+      "tags": [
+        "文件"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_preprocessor",
+      "kp": "预处理与多文件",
+      "lang": "c",
+      "core": false,
+      "prereq": [
+        "c_function"
+      ],
+      "names": [
+        "预处理",
+        "#ifdef",
+        "#ifndef",
+        "头文件保护",
+        "多文件编程",
+        "宏替换"
+      ],
+      "tags": [
+        "工程"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "c_common_pitfall",
+      "kp": "C语言常见陷阱",
+      "lang": "c",
+      "core": true,
+      "prereq": [
+        "c_array"
+      ],
+      "names": [
+        "数组越界",
+        "==和=",
+        "悬空指针",
+        "整数溢出",
+        "常见陷阱",
+        "易错点",
+        "常见错误",
+        "陷阱"
+      ],
+      "tags": [
+        "调试"
+      ],
+      "weak_names": [
+        "分号",
+        "越界",
+        "未初始化"
+      ]
+    },
+    {
+      "id": "py_basic_structure",
+      "kp": "Python程序基本结构",
+      "lang": "python",
+      "core": true,
+      "prereq": [],
+      "names": [
+        "print",
+        "input()",
+        "脚本",
+        "if __name__"
+      ],
+      "tags": [
+        "基础"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_variable",
+      "kp": "Python变量与数据类型",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_basic_structure"
+      ],
+      "names": [
+        "变量",
+        "int",
+        "float",
+        "str",
+        "bool",
+        "动态类型",
+        "type()"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_operator",
+      "kp": "Python运算符",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_variable"
+      ],
+      "names": [
+        "运算符",
+        "//",
+        "**",
+        "%",
+        "赋值",
+        "比较运算"
+      ],
+      "tags": [
+        "运算"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_string_ops",
+      "kp": "Python字符串操作",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_variable"
+      ],
+      "names": [
+        "字符串切片",
+        "split",
+        "join",
+        "strip",
+        "format",
+        "f-string",
+        "格式化"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_conditional",
+      "kp": "Python分支",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_operator"
+      ],
+      "names": [
+        "if",
+        "elif",
+        "else",
+        "条件判断",
+        "缩进"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_loop",
+      "kp": "Python循环",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_conditional"
+      ],
+      "names": [
+        "for",
+        "while",
+        "range",
+        "break",
+        "continue",
+        "循环"
+      ],
+      "tags": [
+        "控制结构"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_list",
+      "kp": "列表",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_loop"
+      ],
+      "names": [
+        "list",
+        "列表",
+        "append",
+        "切片",
+        "索引",
+        "列表推导式"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_tuple_set",
+      "kp": "元组与集合",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_list"
+      ],
+      "names": [
+        "tuple",
+        "元组",
+        "set",
+        "集合",
+        "去重",
+        "不可变"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_dict",
+      "kp": "字典",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_list"
+      ],
+      "names": [
+        "dict",
+        "字典",
+        "键值对",
+        "keys",
+        "values",
+        "items",
+        "get"
+      ],
+      "tags": [
+        "数据"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_function",
+      "kp": "Python函数",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_loop"
+      ],
+      "names": [
+        "def",
+        "函数",
+        "参数",
+        "返回值",
+        "lambda",
+        "默认参数",
+        "关键字参数"
+      ],
+      "tags": [
+        "函数"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_scope",
+      "kp": "Python作用域",
+      "lang": "python",
+      "core": false,
+      "prereq": [
+        "py_function"
+      ],
+      "names": [
+        "LEGB",
+        "global",
+        "nonlocal",
+        "局部变量",
+        "全局变量"
+      ],
+      "tags": [
+        "函数"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_module",
+      "kp": "模块与导入",
+      "lang": "python",
+      "core": false,
+      "prereq": [
+        "py_function"
+      ],
+      "names": [
+        "import",
+        "from",
+        "模块",
+        "包",
+        "pip",
+        "标准库"
+      ],
+      "tags": [
+        "工程"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_file_io",
+      "kp": "Python文件读写",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_function"
+      ],
+      "names": [
+        "open",
+        "with",
+        "read",
+        "write",
+        "readlines",
+        "文件路径",
+        "encoding"
+      ],
+      "tags": [
+        "文件"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_exception",
+      "kp": "异常处理",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_function"
+      ],
+      "names": [
+        "try",
+        "except",
+        "finally",
+        "raise",
+        "异常",
+        "ValueError"
+      ],
+      "tags": [
+        "调试"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_class",
+      "kp": "类与对象",
+      "lang": "python",
+      "core": true,
+      "prereq": [
+        "py_function"
+      ],
+      "names": [
+        "class",
+        "对象",
+        "self",
+        "__init__",
+        "实例",
+        "属性",
+        "方法",
+        "继承"
+      ],
+      "tags": [
+        "面向对象"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_comprehension",
+      "kp": "推导式与生成器",
+      "lang": "python",
+      "core": false,
+      "prereq": [
+        "py_list"
+      ],
+      "names": [
+        "列表推导",
+        "字典推导",
+        "生成器",
+        "yield",
+        "迭代器",
+        "iter",
+        "next"
+      ],
+      "tags": [
+        "进阶"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "py_stdlib",
+      "kp": "常用标准库",
+      "lang": "python",
+      "core": false,
+      "prereq": [
+        "py_module"
+      ],
+      "names": [
+        "os",
+        "sys",
+        "json",
+        "math",
+        "random",
+        "datetime",
+        "collections",
+        "pathlib",
+        "re",
+        "正则"
+      ],
+      "tags": [
+        "工程"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "gen_algorithm_thinking",
+      "kp": "算法思维",
+      "lang": "*",
+      "core": true,
+      "prereq": [],
+      "names": [
+        "算法",
+        "时间复杂度",
+        "空间复杂度",
+        "O(n)",
+        "穷举",
+        "贪心",
+        "分治",
+        "排序",
+        "查找",
+        "二分"
+      ],
+      "tags": [
+        "通用"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "gen_debug",
+      "kp": "调试方法",
+      "lang": "*",
+      "core": true,
+      "prereq": [],
+      "names": [
+        "调试",
+        "debug",
+        "断点",
+        "打印调试",
+        "报错信息",
+        "段错误",
+        "segmentation fault",
+        "编译错误",
+        "运行时错误"
+      ],
+      "tags": [
+        "通用"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "gen_code_style",
+      "kp": "代码风格",
+      "lang": "*",
+      "core": false,
+      "prereq": [],
+      "names": [
+        "代码风格",
+        "命名规范",
+        "注释",
+        "缩进",
+        "可读性",
+        "magic number",
+        "魔法数字"
+      ],
+      "tags": [
+        "通用"
+      ],
+      "weak_names": []
+    },
+    {
+      "id": "gen_test",
+      "kp": "测试与边界",
+      "lang": "*",
+      "core": true,
+      "prereq": [],
+      "names": [
+        "测试用例",
+        "边界条件",
+        "单元测试",
+        "断言",
+        "assert",
+        "特殊输入",
+        "空输入",
+        "边界检查"
+      ],
+      "tags": [
+        "通用"
+      ],
+      "weak_names": []
+    }
+  ]
+}

@@ -1,0 +1,421 @@
+{
+  "items": [
+    {
+      "title": "sizeof 与各类型的大小",
+      "difficulty": 1,
+      "language": "c",
+      "why": "你在第 1 题把 sizeof(3.14f) 写成了 8，说明还没建立「后缀决定类型」的意识。这篇把各类型的大小放在一起对比，一次记住。",
+      "related_exercises": "第 1 题",
+      "knowledge_points": [
+        "sizeof运算符",
+        "数据类型",
+        "格式占位符"
+      ],
+      "input_spec": "无输入",
+      "stdin": "",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    char c = 'A';\n    int i = 100;\n    double d = 3.14;\n\n    printf(\"char=%zu int=%zu double=%zu\\n\", sizeof(char), sizeof(int), sizeof(double));\n    printf(\"变量 c=%zu i=%zu d=%zu\\n\", sizeof(c), sizeof(i), sizeof(d));\n    printf(\"字面量 3.14=%zu 3.14f=%zu\\n\", sizeof(3.14), sizeof(3.14f));\n    printf(\"字符串 \\\"ABC\\\"=%zu \\\"A\\\"=%zu\\n\", sizeof(\"ABC\"), sizeof(\"A\"));\n    printf(\"相加 sizeof(c)+sizeof(i)=%zu\\n\", sizeof(c) + sizeof(i));\n    return 0;\n}\n",
+      "predict_questions": [
+        "sizeof(3.14) 和 sizeof(3.14f) 各是多少？差在哪里？",
+        "sizeof(\"A\") 为什么不是 1？",
+        "sizeof(c) + sizeof(i) 的结果是字符相加还是数字相加？"
+      ],
+      "watch_points": [
+        "后缀 f 决定字面量是 float（4 字节）还是 double（8 字节）",
+        "字符串字面量末尾自带 '\\0'，所以 \"A\" 占 2 字节、\"ABC\" 占 4 字节",
+        "sizeof 的结果是 size_t，必须用 %zu 输出，用 %d 在 64 位平台是未定义行为",
+        "sizeof 在编译期就求值，不参与运行时的字符运算"
+      ],
+      "related_notes": [
+        {
+          "target": "数据类型",
+          "note": "各类型占用字节"
+        },
+        {
+          "target": "C-数据类型-内存占用图-说明",
+          "note": "内存占用图"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 1 题"
+        }
+      ]
+    },
+    {
+      "title": "整数除法与类型转换的陷阱",
+      "difficulty": 2,
+      "language": "c",
+      "why": "第 6 题你改对了，但第 3 题又把 c /= 5 算成了 1.4；第 9、10 题同样绕不开整数除法。这篇把除法的四种写法放在一起，一次看清。",
+      "related_exercises": "第 3、6、9、10 题",
+      "knowledge_points": [
+        "整数除法与取余",
+        "类型转换",
+        "数据类型"
+      ],
+      "input_spec": "无输入",
+      "stdin": "",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    int a = 7, b = 2;\n\n    printf(\"%d\\n\", a / b);              /* 3    两个整数相除 -> 整数除法 */\n    printf(\"%.1f\\n\", a / 2.0);          /* 3.5  一边是 double -> 浮点除法 */\n    printf(\"%.1f\\n\", (double)a / b);    /* 3.5  先转换，再除 */\n    printf(\"%.1f\\n\", (double)(a / b));  /* 3.0  先整数除，再转换（小数已经丢了） */\n    printf(\"%d %d\\n\", -7 / 2, -7 % 2);  /* -3 -1 向零截断，余数符号跟被除数 */\n\n    int x = 3.99;                        /* 3   赋值时直接截断，不是四舍五入 */\n    printf(\"%d\\n\", x);\n\n    double money = 100;\n    printf(\"%.2f\\n\", money / 3);        /* 33.33 double / int 仍是浮点除法 */\n    return 0;\n}\n",
+      "predict_questions": [
+        "第 1 行和第 2 行为什么不一样？",
+        "第 3 行和第 4 行都写了 (double)，为什么一个是 3.5、一个是 3.0？",
+        "-7 / 2 和 -7 % 2 各是多少？余数的符号跟谁一致？",
+        "int x = 3.99; 之后 x 是 3 还是 4？"
+      ],
+      "watch_points": [
+        "强制转换发生在除法**之前**还是**之后**，结果完全不同",
+        "整数除法向零截断（-7/2 是 -3 不是 -4），% 的结果符号与被除数一致",
+        "double 赋给 int 是直接丢掉小数，不是四舍五入",
+        "想把整数除法变成浮点除法，只要让**任意一边**是浮点即可（写 5.0 而不是 5）"
+      ],
+      "related_notes": [
+        {
+          "target": "C语言",
+          "note": "算术操作符、强制类型转换"
+        },
+        {
+          "target": "%f",
+          "note": "小数位写法"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 3、6 题"
+        }
+      ]
+    },
+    {
+      "title": "进制输出与位权",
+      "difficulty": 2,
+      "language": "c",
+      "why": "第 2 题你把 010 算成了 10，忽略了「前导 0 表示八进制」。这篇用位权把三种进制对上号。",
+      "related_exercises": "第 2 题",
+      "knowledge_points": [
+        "进制与位表示",
+        "格式占位符",
+        "常量"
+      ],
+      "input_spec": "无输入",
+      "stdin": "",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    int n = 255;\n\n    printf(\"十进制:%d 八进制:%o 十六进制:%x 大写:%X\\n\", n, n, n, n);\n    printf(\"字面量 0377=%d 0xFF=%d 010=%d\\n\", 0377, 0xFF, 010);\n    printf(\"十进制位权 1*100+2*10+3=%d\\n\", 1 * 100 + 2 * 10 + 3);\n    printf(\"八进制位权 (12)8 = 1*8+2 = %d\\n\", 1 * 8 + 2);\n    printf(\"十六进制位权 (1F)16 = 1*16+15 = %d\\n\", 1 * 16 + 15);\n    printf(\"同一个数换个格式符就是换个写法:%d %o %x\\n\", 8, 8, 8);\n    return 0;\n}\n",
+      "predict_questions": [
+        "010 输出多少？为什么不是 10？",
+        "255 的八进制是 377、十六进制是 ff，它们和二进制 11111111 怎么对应？",
+        "%o 和 %x 会自动加前缀 0 或 0x 吗？"
+      ],
+      "watch_points": [
+        "以 0 开头的整型字面量是八进制，以 0x 开头是十六进制 —— 这是**字面量**的规则，不是输出规则",
+        "%o / %x 输出时**不带**前缀，要用 %#o / %#x 才带",
+        "位权思想：每一位的值 = 数字 × 基数^位次，十进制八进制十六进制都一样",
+        "同一个 int 在内存里只有一种表示，格式符只是换了「怎么念」"
+      ],
+      "related_notes": [
+        {
+          "target": "八进制、十进制和十六进制",
+          "note": "位权与换算"
+        },
+        {
+          "target": "C语言",
+          "note": "printf 格式符"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 2 题"
+        }
+      ]
+    },
+    {
+      "title": "自减与复合赋值的逐步追踪",
+      "difficulty": 2,
+      "language": "c",
+      "why": "第 3 题你把 c /= 5 算成了 1.4，说明追踪过程时漏掉了「整数除法」这一步。这篇每执行一步就打印一次，你可以逐行对照自己的手算。",
+      "related_exercises": "第 3 题",
+      "knowledge_points": [
+        "运算符",
+        "变量",
+        "整数除法与取余"
+      ],
+      "input_spec": "无输入",
+      "stdin": "",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    int a = 8;\n    int b = a--;        /* b 拿旧值 8，之后 a 变成 7 */\n    int c = --a;        /* a 先减成 6，c 拿新值 6 */\n\n    printf(\"第1次 a=%d b=%d c=%d\\n\", a, b, c);\n\n    a -= 3;             /* a = 3 */\n    b *= 3;             /* b = 24 */\n    c /= 5;             /* c = 1，整数除法舍去 0.2 */\n\n    printf(\"第2次 a=%d b=%d c=%d\\n\", a, b, c);\n\n    a %= 5;             /* a = 3 */\n    printf(\"第3次 a=%d\\n\", a);\n    return 0;\n}\n",
+      "predict_questions": [
+        "先在纸上写出三次输出时 a、b、c 的值，再运行对照。",
+        "b = a-- 与 c = --a 之后，为什么 b 和 c 都不等于 a？",
+        "c /= 5 之前 c 是几？结果为什么不是 1.2？"
+      ],
+      "watch_points": [
+        "a-- 先把旧值交出去，自己再减 1；--a 先减 1，再把新值交出去",
+        "-= *= /= %= 都是「先算，再赋值回自己」",
+        "永远不要在同一个表达式里对同一变量多次自增/自减，那是未定义行为",
+        "复合赋值遇到整数除法时，小数部分当场就丢了"
+      ],
+      "related_notes": [
+        {
+          "target": "C语言",
+          "note": "赋值操作符、单目操作符"
+        },
+        {
+          "target": "关于空格",
+          "note": "运算符两侧的写法"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 3 题"
+        }
+      ]
+    },
+    {
+      "title": "四个「零」：'0'、0、'\\0'、\"0\"",
+      "difficulty": 2,
+      "language": "c",
+      "why": "第 4 题你说 sizeof(\"0\") 是 1，漏了末尾的结束符；第 8 题又把字符 '0' 判成了「不是数字字符」。这两个错误都源于四个「零」没分清，这篇一次讲透。",
+      "related_exercises": "第 4、8 题",
+      "knowledge_points": [
+        "字符与ASCII",
+        "转义字符",
+        "字符串",
+        "sizeof运算符"
+      ],
+      "input_spec": "无输入",
+      "stdin": "",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    char c1 = '0';      /* 字符零：值是 ASCII 码 48 */\n    int  i0 = 0;        /* 整数零：值就是 0 */\n    char c2 = '\\0';     /* 空字符：值是 0，用作字符串结束标志 */\n\n    printf(\"'0'  值=%d sizeof=%zu\\n\", c1, sizeof(c1));\n    printf(\"0    值=%d sizeof=%zu\\n\", i0, sizeof(i0));\n    printf(\"'\\\\0' 值=%d sizeof=%zu\\n\", c2, sizeof(c2));\n    printf(\"\\\"0\\\"  sizeof=%zu\\n\", sizeof(\"0\"));\n    printf(\"'7'-'0'=%d\\n\", '7' - '0');\n    printf(\"c2==0 成立吗:%d  c1==0 成立吗:%d\\n\", c2 == 0, c1 == 0);\n    return 0;\n}\n",
+      "predict_questions": [
+        "'0' 的值是多少？它和整数 0 相等吗？",
+        "sizeof(\"0\") 是 1 还是 2？为什么？",
+        "'7' - '0' 为什么等于 7？这个技巧能推广到其它数字字符吗？"
+      ],
+      "watch_points": [
+        "'0' 是 48，'\\0' 是 0 —— 一个是能打印的数字字符，一个是不打印的结束标志",
+        "\"0\" 是字符串，内存里是 '0' 和 '\\0' 两个字节",
+        "数字字符的 ASCII 码是连续排列的，所以 ch - '0' 就是它代表的数值",
+        "比较时 '0' == 0 不成立，这是第 8 题出错的根源"
+      ],
+      "related_notes": [
+        {
+          "target": "Q&A(1)",
+          "note": "字符 0 的值是 48"
+        },
+        {
+          "target": "3字母词",
+          "note": "ASCII"
+        },
+        {
+          "target": "C语言",
+          "note": "字符和 ASCII 编码、转义字符"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 4、8 题"
+        }
+      ]
+    },
+    {
+      "title": "scanf 的写法与返回值检查",
+      "difficulty": 3,
+      "language": "c",
+      "why": "第 5 题你只找出两处问题，漏了 \" %c\" 前面那个空格。这篇把 scanf 的三个易错点（取地址符、%lf、前导空格）和返回值检查集中演示。",
+      "related_exercises": "第 5、6 题",
+      "knowledge_points": [
+        "scanf输入",
+        "格式占位符",
+        "if分支",
+        "数据类型"
+      ],
+      "input_spec": "一行：整数 小数 字符，例如 `42 3.5 X`",
+      "stdin": "42 3.5 X\n",
+      "output_prefix": "输入 42 3.5 X →\n",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    int n;\n    double price;\n    char ch;\n\n    if (scanf(\"%d\", &n) != 1) {        /* 1) 必须传地址 &n  2) 检查返回值 */\n        printf(\"整数读取失败\\n\");\n        return 1;\n    }\n    if (scanf(\"%lf\", &price) != 1) {   /* double 读入用 %lf（输出才用 %f） */\n        printf(\"小数读取失败\\n\");\n        return 1;\n    }\n    if (scanf(\" %c\", &ch) != 1) {      /* 前导空格：吃掉上一次输入留下的换行 */\n        printf(\"字符读取失败\\n\");\n        return 1;\n    }\n\n    printf(\"n=%d price=%.2f ch=%c\\n\", n, price, ch);\n    printf(\"scanf 的返回值 = 成功读入的项数\\n\");\n    return 0;\n}\n",
+      "predict_questions": [
+        "如果把 &n 写成 n，编译会报错吗？运行时会发生什么？",
+        "把 %lf 换成 %f 读 double，会怎样？",
+        "把 \" %c\" 的空格去掉，ch 会读到什么？"
+      ],
+      "watch_points": [
+        "scanf 需要的是变量的**地址**，所以除字符数组外都要加 &",
+        "读入 double 用 %lf，输出 double 用 %f —— 两者不对称，是最常考的一点",
+        "\" %c\" 的前导空格表示「跳过任意个空白字符」，否则读到的是残留的换行",
+        "返回值是成功读入的项数；不检查它，输入非法时就会用到未初始化的值"
+      ],
+      "related_notes": [
+        {
+          "target": "%f",
+          "note": "double 的格式符"
+        },
+        {
+          "target": "关于空格",
+          "note": "格式串里的空格"
+        },
+        {
+          "target": "C语言",
+          "note": "scanf 输入"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 5、6 题"
+        }
+      ]
+    },
+    {
+      "title": "字符与 ASCII：区间判断与大小写转换",
+      "difficulty": 3,
+      "language": "c",
+      "why": "第 8 题你把数字字符的区间写成了 '1'~'9'，结果输入 '0' 时被判成「其它字符」、数值输出 -1。边界字符漏掉是区间判断最常见的错误，这篇专门盯这一点。",
+      "related_exercises": "第 8 题",
+      "knowledge_points": [
+        "字符与ASCII",
+        "if分支",
+        "关系与逻辑运算",
+        "printf输出"
+      ],
+      "input_spec": "一个非空白字符，例如 `g`",
+      "stdin": "g\n",
+      "output_prefix": "输入 g →\n",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    char ch;\n\n    if (scanf(\" %c\", &ch) != 1) {\n        return 1;\n    }\n\n    printf(\"字符:%c ASCII:%d\\n\", ch, ch);\n\n    if (ch >= 'A' && ch <= 'Z') {\n        printf(\"大写字母 -> 小写:%c\\n\", ch + 32);\n    } else if (ch >= 'a' && ch <= 'z') {\n        printf(\"小写字母 -> 大写:%c\\n\", ch - 32);\n    } else if (ch >= '0' && ch <= '9') {      /* 注意下界是 '0' 不是 '1' */\n        printf(\"数字字符 -> 数值:%d\\n\", ch - '0');\n    } else {\n        printf(\"其它字符\\n\");\n    }\n\n    printf(\"常量对照 '0'=%d '9'=%d 'A'=%d 'a'=%d 差=%d\\n\", '0', '9', 'A', 'a', 'a' - 'A');\n    return 0;\n}\n",
+      "predict_questions": [
+        "输入 '0' 会走哪个分支？输出什么？",
+        "为什么 ch + 32 就能把大写变成小写？",
+        "如果输入是空格，这个程序会读到它吗？（想想 \" %c\"）"
+      ],
+      "watch_points": [
+        "区间的两个端点都要取到：`>= '0' && <= '9'`，写成 `'1'` 就漏了 0",
+        "字符本质是小整数，所以能直接比较、加减；大小写字母差 32",
+        "ch - '0' 比 ch - 48 更好读，也不依赖记住 48",
+        "if / else if 的顺序就是优先级，第一个成立的分支执行完就跳出整条链"
+      ],
+      "related_notes": [
+        {
+          "target": "Q&A(1)",
+          "note": "字符与 ASCII"
+        },
+        {
+          "target": "C语言",
+          "note": "关系运算符、分支"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 8 题"
+        }
+      ]
+    },
+    {
+      "title": "拆位：/ 与 % 的配合",
+      "difficulty": 3,
+      "language": "c",
+      "why": "第 7 题你做对了，但只用到了三位数。这篇把拆位的通用套路固化下来，为以后处理任意位数做准备（那时需要配合循环）。",
+      "related_exercises": "第 7 题",
+      "knowledge_points": [
+        "整数除法与取余",
+        "printf输出",
+        "scanf输入"
+      ],
+      "input_spec": "一个三位正整数，例如 `583`",
+      "stdin": "583\n",
+      "output_prefix": "输入 583 →\n",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    int n;\n\n    if (scanf(\"%d\", &n) != 1 || n < 100 || n > 999) {\n        printf(\"请输入三位正整数\\n\");\n        return 1;\n    }\n\n    printf(\"原数:%d\\n\", n);\n    printf(\"个位:%d 十位:%d 百位:%d\\n\", n % 10, n / 10 % 10, n / 100);\n    printf(\"去掉个位:%d 去掉两位:%d\\n\", n / 10, n / 100);\n    printf(\"各位之和:%d\\n\", n % 10 + n / 10 % 10 + n / 100);\n    printf(\"逆序数:%d\\n\", n % 10 * 100 + n / 10 % 10 * 10 + n / 100);\n    printf(\"边界 100 的逆序:%d\\n\", 100 % 10 * 100 + 100 / 10 % 10 * 10 + 100 / 100);\n    return 0;\n}\n",
+      "predict_questions": [
+        "十位为什么要先 /10 再 %10，直接 %100 行不行？",
+        "逆序数的三个位权 100、10、1 分别对应原来的哪一位？",
+        "输入 100 时逆序数是多少？前导零去哪了？"
+      ],
+      "watch_points": [
+        "拆位口诀：`% 10` 取最低位，`/ 10` 去掉最低位",
+        "取第 k 位（从右数，k 从 0 开始）：`n / 10^k % 10`",
+        "组装逆序数就是按位权重新乘回去",
+        "用整数输出天然没有前导零：037 打印成 37"
+      ],
+      "related_notes": [
+        {
+          "target": "八进制、十进制和十六进制",
+          "note": "位权思想"
+        },
+        {
+          "target": "C语言",
+          "note": "算术操作符"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 7 题"
+        }
+      ]
+    },
+    {
+      "title": "if / else if 分档与边界归属",
+      "difficulty": 4,
+      "language": "c",
+      "why": "第 9 题你做对了，但 10 吨和 20 吨落在哪一档，你是靠感觉而不是靠推理。这篇把每个边界值都单独打出来，让你看清「> 20」与「>= 20」的差别。",
+      "related_exercises": "第 9 题",
+      "knowledge_points": [
+        "if分支",
+        "关系与逻辑运算",
+        "类型转换",
+        "格式占位符"
+      ],
+      "input_spec": "用水量（整数吨），例如 `20`",
+      "stdin": "20\n",
+      "output_prefix": "输入 20 吨 →\n",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    int w;\n    double fee;\n\n    if (scanf(\"%d\", &w) != 1 || w < 0) {\n        printf(\"请输入非负整数\\n\");\n        return 1;\n    }\n\n    if (w > 20) {                                  /* 从高档往低档判断 */\n        fee = 10 * 2 + 10 * 3 + (w - 20) * 5;\n        printf(\"第三档:10吨x2 + 10吨x3 + %d吨x5\\n\", w - 20);\n    } else if (w > 10) {\n        fee = 10 * 2 + (w - 10) * 3;\n        printf(\"第二档:10吨x2 + %d吨x3\\n\", w - 10);\n    } else {\n        fee = w * 2;\n        printf(\"第一档:%d吨x2\\n\", w);\n    }\n\n    printf(\"水费:%.2f元\\n\", fee);\n    printf(\"边界自查:10吨=%.2f 20吨=%.2f 21吨=%.2f\\n\", 10 * 2.0, 10 * 2 + 10 * 3.0,\n           10 * 2 + 10 * 3 + 1 * 5.0);\n    return 0;\n}\n",
+      "predict_questions": [
+        "输入 20 会走哪一档？如果把条件改成 w >= 20 呢？",
+        "为什么从高档往低档判断比从低档往高档更省事？",
+        "fee 是 double，右边的整数乘法结果是怎么变成 double 的？"
+      ],
+      "watch_points": [
+        "阶梯计价的关键是**超出部分**才按高价，不能整批按最高档算",
+        "边界归属由比较符决定：`w > 10` 时 10 吨属于第一档",
+        "if / else if 链只会执行第一个成立的分支",
+        "整数乘法的结果赋给 double 会自动转换，但除法要小心（这里刻意写成 2.0）"
+      ],
+      "related_notes": [
+        {
+          "target": "C语言",
+          "note": "关系运算符、分支结构"
+        },
+        {
+          "target": "%f",
+          "note": "保留两位小数"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 9 题"
+        }
+      ]
+    },
+    {
+      "title": "【预习】while 循环与 switch 菜单",
+      "difficulty": 4,
+      "language": "c",
+      "why": "第 10 题（综合挑战）你没提交，它要用到 switch 和多位数处理。这篇把 while 与 switch 的骨架先摆出来，看懂之后那道题就不难了。",
+      "related_exercises": "第 10 题",
+      "knowledge_points": [
+        "while循环",
+        "switch语句",
+        "整数除法与取余"
+      ],
+      "input_spec": "一个正整数，例如 `9875`",
+      "stdin": "9875\n",
+      "output_prefix": "输入 9875 →\n",
+      "preview": true,
+      "preview_uses": "用了 while 循环与 switch 的 default 分支：这两个在你的笔记里只出现过示例，还没有练过，所以标为预习篇（先看懂，不要求现在就写出来）",
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    int n;\n    int sum = 0;\n    int count = 0;\n\n    if (scanf(\"%d\", &n) != 1 || n <= 0) {\n        printf(\"请输入正整数\\n\");\n        return 1;\n    }\n\n    while (n > 0) {           /* 预习：条件为真就重复执行循环体 */\n        sum += n % 10;        /* 取出最低位并累加 */\n        n /= 10;              /* 去掉最低位 */\n        count++;              /* 统计位数 */\n    }\n\n    switch (count) {          /* 预习：按位数分支，每个 case 都要 break */\n        case 1: printf(\"一位数\\n\"); break;\n        case 2: printf(\"两位数\\n\"); break;\n        case 3: printf(\"三位数\\n\"); break;\n        default: printf(\"四位及以上\\n\"); break;\n    }\n\n    printf(\"各位数字之和:%d\\n\", sum);\n    printf(\"原数已被循环改成:%d（这就是为什么要先备份）\\n\", n);\n    return 0;\n}\n",
+      "predict_questions": [
+        "用表格追踪每一轮循环结束后 n、sum、count 的值。",
+        "为什么循环条件是 n > 0？如果输入 0 会发生什么？",
+        "循环结束后 n 变成了几？这说明拆位循环有什么副作用？",
+        "如果 case 3 后面漏了 break，输出会变成什么？"
+      ],
+      "watch_points": [
+        "拆位循环的固定套路：`sum += n % 10; n /= 10;`",
+        "循环会把 n 消耗成 0，需要保留原值就得先备份一个变量",
+        "switch 漏写 break 会「贯穿」到下一个 case 继续执行",
+        "这正好是第 7 题拆位写法的推广：三位数是写死三次，循环是重复到没有为止"
+      ],
+      "related_notes": [
+        {
+          "target": "C语言",
+          "note": "while 循环、switch 语句"
+        },
+        {
+          "target": "11月1日练习",
+          "note": "第 7、10 题"
+        }
+      ]
+    }
+  ]
+}

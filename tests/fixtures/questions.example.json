@@ -1,0 +1,855 @@
+{
+  "questions": [
+    {
+      "id": "Q1",
+      "title": "sizeof 与数据类型",
+      "question_type": "output_prediction",
+      "language": "c",
+      "difficulty": 1,
+      "est_minutes": 8,
+      "is_combined": false,
+      "knowledge_points": [
+        "sizeof运算符",
+        "数据类型",
+        "格式占位符",
+        "字符串"
+      ],
+      "required_knowledge_points": [
+        "sizeof运算符",
+        "数据类型"
+      ],
+      "stem": "阅读下面的程序，不运行代码，写出每一行的输出结果。",
+      "requirements": [
+        "解释为什么 sizeof(\"ABC\") 是 4 而不是 3",
+        "解释 sizeof(3.14) 与 sizeof(3.14f) 为什么不同",
+        "说明 sizeof 的结果应该用哪个占位符输出，为什么不是 %d"
+      ],
+      "code_to_read": "#include <stdio.h>\n\nint main(void)\n{\n    char c = 'A';\n    int i = 100;\n    double d = 3.14;\n\n    printf(\"%zu %zu %zu\\n\", sizeof(char), sizeof(int), sizeof(double));\n    printf(\"%zu\\n\", sizeof(c) + sizeof(i));\n    printf(\"%zu %zu\\n\", sizeof(3.14), sizeof(3.14f));\n    printf(\"%zu\\n\", sizeof(\"ABC\"));\n    printf(\"%zu %zu %zu\\n\", sizeof(c), sizeof(i), sizeof(d));\n    return 0;\n}\n",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "sizeof 与类型大小",
+          "alias": "精读第 2 篇"
+        },
+        {
+          "target": "数据类型",
+          "note": "各类型占用字节"
+        },
+        {
+          "target": "C-数据类型-内存占用图-说明",
+          "note": "内存占用图"
+        },
+        {
+          "target": "C语言",
+          "note": "sizeof 运算符"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[sizeof运算符]] 与 [[数据类型]]",
+        "L2": "先回忆 char/int/double 各占几字节，再注意字符串字面量末尾多一个结束符",
+        "L3": "逐行：sizeof(char)=1；sizeof(c)+sizeof(i) 是数值相加；3.14 是 double，3.14f 是 float"
+      },
+      "answer_kind": "text",
+      "answer_points": [
+        "字符串字面量末尾自带 '\\0'，所以 \"ABC\" 占 4 字节，而 strlen(\"ABC\") 才是 3",
+        "3.14 默认是 double（8 字节），加 f 后缀才是 float（4 字节）",
+        "sizeof 的结果类型是 size_t，用 %zu 输出；用 %d 在 64 位平台上是未定义行为"
+      ],
+      "expected_answer": "1 4 8\n5\n8 4\n4\n1 4 8",
+      "_expected_from": "gcc 实跑（gcc.EXE），无警告",
+      "explanation": "1. 第 1 行：`sizeof(char)`=1、`sizeof(int)`=4、`sizeof(double)`=8（常见 64 位平台），结果类型是 `size_t`，所以用 `%zu`。\n2. 第 2 行：`sizeof(c) + sizeof(i)` 是 1 + 4 = 5 —— sizeof 的结果是普通数值，可以直接参与运算。\n3. 第 3 行：`3.14` 不带后缀是 **double**（8 字节），`3.14f` 带 f 后缀是 **float**（4 字节）。这一行就是本题的考点。\n4. 第 4 行：`\"ABC\"` 是字符串字面量，内存里存 'A'、'B'、'C' 和结束符 '\\0'，共 4 字节；`strlen(\"ABC\")` 不计结束符，才是 3。\n5. 第 5 行：sizeof 作用于变量时看的是**变量的类型**，c 是 char(1)、i 是 int(4)、d 是 double(8)。\n6. 提醒：具体字节数由平台决定，`sizeof(long)` 在 64 位 Windows 是 4、在 64 位 Linux 是 8，所以要用 sizeof 查而不是背。"
+    },
+    {
+      "id": "Q2",
+      "title": "进制表示与格式占位符",
+      "question_type": "output_prediction",
+      "language": "c",
+      "difficulty": 2,
+      "est_minutes": 10,
+      "is_combined": false,
+      "knowledge_points": [
+        "进制与位表示",
+        "格式占位符",
+        "printf输出",
+        "常量"
+      ],
+      "required_knowledge_points": [
+        "进制与位表示",
+        "格式占位符"
+      ],
+      "stem": "分析程序的输出，注意同一个数在不同进制下的写法。",
+      "requirements": [
+        "逐行写出结果",
+        "解释 010 为什么输出 8",
+        "把 255 写成二进制，并说明它和 377、ff 的对应关系"
+      ],
+      "code_to_read": "#include <stdio.h>\n\nint main(void)\n{\n    int n = 255;\n\n    printf(\"%d %o %x %X\\n\", n, n, n, n);\n    printf(\"%d %d\\n\", 0377, 0xFF);\n    printf(\"%d\\n\", 010);\n    printf(\"%d\\n\", 10);\n    return 0;\n}\n",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "进制输出与位权",
+          "alias": "精读第 3 篇"
+        },
+        {
+          "target": "八进制、十进制和十六进制",
+          "note": "位权与换算"
+        },
+        {
+          "target": "C语言",
+          "note": "printf 的格式符"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[进制与位表示]] 与 [[格式占位符]]",
+        "L2": "%o 是八进制、%x 是小写十六进制；以 0 开头的字面量是八进制",
+        "L3": "255 = 11111111(二) = 377(八) = ff(十六)；010 = 1×8+0 = 8"
+      },
+      "answer_kind": "text",
+      "answer_points": [
+        "以 0 开头的整型字面量是八进制，010 = 8；以 0x 开头是十六进制",
+        "%o 不带前导 0，%x 输出小写字母，%X 输出大写字母"
+      ],
+      "expected_answer": "255 377 ff FF\n255 255\n8\n10",
+      "_expected_from": "gcc 实跑（gcc.EXE），无警告",
+      "explanation": "1. 第 1 行：`%d` 十进制 255；`%o` 八进制 377；`%x` 小写十六进制 ff；`%X` 大写 FF。这四个格式符输出的都是**同一个数**，且都不带前缀。\n2. 第 2 行：`0377` 是八进制字面量 = 3×64 + 7×8 + 7 = 255；`0xFF` = 15×16 + 15 = 255。两者相等。\n3. 第 3 行：`010` 以 0 开头，是**八进制**字面量 = 1×8 + 0 = 8，不是十进制的 10。这是本题最容易错的地方。\n4. 第 4 行：`10` 没有前导 0，就是十进制 10。\n5. 对照二进制：255 = 11111111；每 3 位一组 → 377（八进制），每 4 位一组 → ff（十六进制）。\n6. 想输出带前缀的形式要用 `%#o`、`%#x`（会打印 0377、0xff）。"
+    },
+    {
+      "id": "Q3",
+      "title": "自减与复合赋值的逐步追踪",
+      "question_type": "trace",
+      "language": "c",
+      "difficulty": 2,
+      "est_minutes": 12,
+      "is_combined": false,
+      "knowledge_points": [
+        "运算符",
+        "printf输出",
+        "变量"
+      ],
+      "required_knowledge_points": [
+        "运算符"
+      ],
+      "stem": "写出程序运行后的全部输出，并列出每次输出时 a、b、c 的值。",
+      "requirements": [
+        "用表格追踪每一行执行后 a、b、c 的值",
+        "说明 a-- 与 --a 的区别",
+        "解释为什么 c /= 5 的结果是整数而不是小数"
+      ],
+      "code_to_read": "#include <stdio.h>\n\nint main(void)\n{\n    int a = 8;\n\n    int b = a--;\n    int c = --a;\n\n    printf(\"a=%d b=%d c=%d\\n\", a, b, c);\n\n    a -= 3;\n    b *= 3;\n    c /= 5;\n\n    printf(\"a=%d b=%d c=%d\\n\", a, b, c);\n\n    a %= 5;\n    printf(\"a=%d\\n\", a);\n    return 0;\n}\n",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "自增自减逐步追踪",
+          "alias": "精读第 4 篇"
+        },
+        {
+          "target": "C语言",
+          "note": "赋值操作符、单目操作符"
+        },
+        {
+          "target": "关于空格",
+          "note": "运算符两侧的空格习惯"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[运算符]] 里的自减与复合赋值",
+        "L2": "b = a-- 是「先用旧值，再自减」；c = --a 是「先自减，再用新值」",
+        "L3": "a=8 → b=8,a=7 → a=6,c=6 → a=3,b=24,c=1 → a=3"
+      },
+      "answer_kind": "text",
+      "answer_points": [
+        "a-- 先把旧值交给别人，自己再减 1；--a 先减 1，再把新值交出去",
+        "-= *= /= %= 都是「先算后赋值回自己」",
+        "int / int 仍是整数除法，直接舍去小数部分"
+      ],
+      "expected_answer": "a=6 b=8 c=6\na=3 b=24 c=1\na=3",
+      "_expected_from": "gcc 实跑（gcc.EXE），无警告",
+      "explanation": "1. `b = a--`：先把旧值 8 交给 b，之后 a 才减成 7。\n2. `c = --a`：a 先减成 6，再把新值 6 交给 c。所以第一次输出 `a=6 b=8 c=6`。\n3. `a -= 3` → 6-3=3；`b *= 3` → 8×3=24；`c /= 5` → 6/5=**1**（c 是 int，整数除法舍去 0.2，不可能得到 1.4）。第二次输出 `a=3 b=24 c=1`。\n4. `a %= 5` → 3 % 5 = 3。第三次输出 `a=3`。\n5. 通用方法：追踪前先把每个变量的**类型**写在纸的最上面（这里 a、b、c 都是 int），每算一步都问一句「int 能存下小数吗」，就不会再出现 1.4 这种答案。"
+    },
+    {
+      "id": "Q4",
+      "title": "'0'、0、'\\0' 与 \"0\" 的区别",
+      "question_type": "concept",
+      "language": "c",
+      "difficulty": 3,
+      "est_minutes": 14,
+      "is_combined": false,
+      "knowledge_points": [
+        "字符与ASCII",
+        "转义字符",
+        "数据类型",
+        "字符串",
+        "sizeof运算符"
+      ],
+      "required_knowledge_points": [
+        "字符与ASCII",
+        "转义字符"
+      ],
+      "stem": "C 语言里有四个长得很像的东西：'0'、0、'\\0'、\"0\"。请分别说明它们的类型、值和 sizeof 结果。",
+      "requirements": [
+        "逐个写出：类型 / 值 / sizeof",
+        "说明 '0' 与 '\\0' 的本质区别",
+        "说明 \"0\" 在内存里存了哪几个字节",
+        "写出把字符 '7' 变成整数 7 的表达式，并解释原理"
+      ],
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "四个零的对比",
+          "alias": "精读第 5 篇"
+        },
+        {
+          "target": "Q&A(1)",
+          "note": "字符 0 的值是 48"
+        },
+        {
+          "target": "3字母词",
+          "note": "ASCII 与三字母缩写"
+        },
+        {
+          "target": "C语言",
+          "note": "字符和 ASCII 编码、转义字符"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[字符与ASCII]] 与 [[转义字符]]",
+        "L2": "字符常量占 1 字节，字符串字面量末尾还有结束符",
+        "L3": "'0' 是 48；'\\0' 是 0；\"0\" 是 2 字节（'0' 和 '\\0'）；ch - '0' 得到数字"
+      },
+      "answer_kind": "text",
+      "expected_answer": "'0' 是字符常量，类型 char，值是 ASCII 码 48，sizeof 是 1\n0 是整数字面量，类型 int，值就是 0，sizeof 是 4\n'\\0' 是空字符（转义字符），类型 char，值是 0，sizeof 是 1，用作字符串结束标志\n\"0\" 是字符串字面量，类型是字符数组，存了 '0'(48) 和 '\\0'(0) 两个字节，sizeof 是 2\n'0' 与 '\\0' 的区别：值是 48 与 0，一个是可打印的数字字符，一个是不打印的结束标志\n把 '7' 变成 7：ch - '0'，即 55 - 48 = 7（利用数字字符的 ASCII 码连续排列）",
+      "answer_points": [
+        "'0' 的值是 48 而不是 0",
+        "'\\0' 的值是 0，是字符串结束符",
+        "\"0\" 占 2 字节",
+        "ch - '0' 是字符转数字的标准写法"
+      ],
+      "explanation": "1. `'0'`：字符常量，类型 char，值是 ASCII 码 **48**，sizeof 是 1。\n2. `0`：整数字面量，类型 int，值就是 0，sizeof 是 4。\n3. `'\\0'`：转义字符「空字符」，类型 char，值是 **0**，sizeof 是 1；它是字符串的结束标志，不可打印。\n4. `\"0\"`：字符串字面量，内存里是 '0'(48) 和 '\\0'(0) **两个字节**，所以 `sizeof(\"0\")` 是 2，而 `strlen(\"0\")` 是 1。\n5. `'0'` 与 `'\\0'` 的本质区别：值是 48 与 0；一个打印出来是数字零，一个是不可见的结束标志。写 `if (c == 0)` 和 `if (c == '0')` 完全不是一回事。\n6. 把 `'7'` 变成 7：`ch - '0'`，即 55 - 48 = 7。因为 '0'~'9' 的 ASCII 码连续排列，这个写法对任何数字字符都成立，比写 `ch - 48` 更好读。"
+    },
+    {
+      "id": "Q5",
+      "title": "scanf 的三处问题",
+      "question_type": "code_analysis",
+      "language": "c",
+      "difficulty": 3,
+      "est_minutes": 16,
+      "is_combined": false,
+      "knowledge_points": [
+        "scanf输入",
+        "格式占位符",
+        "数据类型",
+        "C语言常见陷阱"
+      ],
+      "required_knowledge_points": [
+        "scanf输入",
+        "格式占位符"
+      ],
+      "stem": "阅读代码，这段程序想读入一个整数、一个小数和一个字符，但有三处问题。",
+      "requirements": [
+        "指出每一处问题所在的行号、现象和原因",
+        "给出改正后的三行 scanf",
+        "解释为什么读字符时格式串要写成 \" %c\"（前面有一个空格）",
+        "指出代码中哪些语句属于函数调用语句，哪一部分属于复合语句"
+      ],
+      "code_to_read": "#include <stdio.h>\n\nint main(void)\n{\n    int n;\n    double price;\n    char ch;\n\n    scanf(\"%d\", n);\n    scanf(\"%f\", &price);\n    scanf(\"%c\\n\", &ch);\n\n    printf(\"%d %.2f %c\\n\", n, price, ch);\n    return 0;\n}\n",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "检查 scanf 的写法与返回值",
+          "alias": "精读第 6 篇"
+        },
+        {
+          "target": "%f",
+          "note": "double 的格式符"
+        },
+        {
+          "target": "关于空格",
+          "note": "格式串里的空格"
+        },
+        {
+          "target": "C语言",
+          "note": "scanf 输入"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[scanf输入]] 与 [[格式占位符]]",
+        "L2": "三处分别在：取地址符、double 的格式符、格式串里的空白符",
+        "L3": "第 9 行要 &n；第 10 行 double 用 %lf；第 11 行写成 \" %c\" 并去掉 \\n"
+      },
+      "answer_kind": "text",
+      "expected_answer": "第 9 行：scanf(\"%d\", n) 缺少取地址符，应为 scanf(\"%d\", &n)，否则把值当地址用，是未定义行为\n第 10 行：double 在 scanf 里必须用 %lf，%f 只适用于 float（printf 里才用 %f 输出 double）\n第 11 行：格式串里的 \\n 会让 scanf 一直等待非空白输入；且上一次回车留下的换行会被 %c 读走，应写成 scanf(\" %c\", &ch)\n改正后：scanf(\"%d\", &n); scanf(\"%lf\", &price); scanf(\" %c\", &ch);\n\" %c\" 前面的空格表示「跳过任意个空白字符」，这样才能读到用户真正输入的字符\n函数调用语句：三个 scanf 与一个 printf；复合语句：main 里 { } 括起来的整段（含声明与表达式语句）",
+      "answer_points": [
+        "scanf 必须传地址",
+        "double 用 %lf 读入",
+        "\" %c\" 前导空格吃掉残留换行",
+        "格式串里不要写 \\n"
+      ],
+      "explanation": "1. 第 9 行 `scanf(\"%d\", n)`：scanf 需要变量的**地址**，必须写 `&n`；把值当地址用是未定义行为（通常直接崩溃）。gcc 会给警告，但不一定算编译错误。\n2. 第 10 行 `scanf(\"%f\", &price)`：price 是 double，**读入**必须用 `%lf`；`%f` 只适用于 float。注意方向是不对称的：输出 double 用 `%f` 就可以。\n3. 第 11 行 `scanf(\"%c\\n\", &ch)`：两个问题 —— 格式串里的 `\\n` 会让 scanf 继续等待非空白输入；而且上一次回车留下的换行会被 `%c` 立刻读走，ch 变成 '\\n'。正确写法是 `scanf(\" %c\", &ch)`，前导空格表示「跳过任意个空白字符」。\n4. 改正后的三行：`scanf(\"%d\", &n);`、`scanf(\"%lf\", &price);`、`scanf(\" %c\", &ch);`\n5. `\" %c\"` 前面那个空格不是可有可无的排版，它是格式串的一部分，专门用来吃掉残留的换行/空格。\n6. 语句分类：三个 scanf 与一个 printf 是**函数调用语句**；`int n;` 等是**声明语句**；main 里 `{ }` 括起来的整段是**复合语句**。"
+    },
+    {
+      "id": "Q6",
+      "title": "修复摄氏转华氏程序",
+      "question_type": "fix_bug",
+      "language": "c",
+      "difficulty": 3,
+      "est_minutes": 18,
+      "is_combined": false,
+      "knowledge_points": [
+        "scanf输入",
+        "类型转换",
+        "整数除法与取余",
+        "格式占位符",
+        "C语言常见陷阱"
+      ],
+      "required_knowledge_points": [
+        "scanf输入",
+        "类型转换",
+        "整数除法与取余"
+      ],
+      "stem": "下面的程序想把摄氏温度换算成华氏温度（公式 F = C ÷ 5 × 9 + 32），但它连编译都过不了，而且即使能编译，结果也是错的。请找出所有问题，并提交修正后的**完整程序**。",
+      "requirements": [
+        "列出你找到的每一处问题及其原因",
+        "提交修正后的完整程序",
+        "输出保留两位小数",
+        "解释原来的 c / 5 * 9 + 32 为什么算错"
+      ],
+      "code_to_read": "#include <stdio.h>\n\nint main(void)\n{\n    int c;\n    scanf(\"%d\", c)\n    double f = c / 5 * 9 + 32;\n    printf(\"%d\\n\", f);\n    return 0;\n}\n",
+      "input_format": "一行一个整数 c（摄氏温度，-100 <= c <= 1000）",
+      "output_format": "一行：华氏温度，保留两位小数，末尾换行",
+      "constraints": [
+        "不得改变公式的数学含义",
+        "必须处理 scanf 读入失败的情况",
+        "只使用已学语法"
+      ],
+      "examples": [
+        {
+          "input": "100\n",
+          "output": "212.00\n"
+        },
+        {
+          "input": "37\n",
+          "output": "98.60\n"
+        }
+      ],
+      "edge_cases": [
+        "c = 0（冰点）",
+        "c 为负数",
+        "c 不是 5 的倍数（会出现小数）"
+      ],
+      "test_input": "37",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "整数除法与类型转换的陷阱",
+          "alias": "精读第 1 篇"
+        },
+        {
+          "target": "%f",
+          "note": "保留两位小数的写法"
+        },
+        {
+          "target": "C语言",
+          "note": "强制类型转换"
+        },
+        {
+          "target": "关于空格",
+          "note": "代码书写规范"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[整数除法与取余]]、[[类型转换]] 与 [[scanf输入]]",
+        "L2": "四处问题：分号、取地址符、整数除法、格式符",
+        "L3": "scanf(\"%d\", &c); 后加分号；把 5 写成 5.0；printf 用 %.2f"
+      },
+      "reference_solution": "#include <stdio.h>\n\nint main(void)\n{\n    int c;\n\n    if (scanf(\"%d\", &c) != 1) {     /* 检查返回值：读入失败就直接退出 */\n        return 1;\n    }\n\n    double f = c / 5.0 * 9 + 32;    /* 关键：5.0 让除法变成浮点除法 */\n\n    printf(\"%.2f\\n\", f);\n    return 0;\n}\n",
+      "reference_solution_language": "c",
+      "tests": [
+        {
+          "name": "水的沸点",
+          "stdin": "100\n",
+          "expected_stdout": "212.00\n"
+        },
+        {
+          "name": "体温",
+          "stdin": "37\n",
+          "expected_stdout": "98.60\n"
+        },
+        {
+          "name": "冰点",
+          "stdin": "0\n",
+          "expected_stdout": "32.00\n"
+        },
+        {
+          "name": "零下",
+          "stdin": "-40\n",
+          "expected_stdout": "-40.00\n"
+        }
+      ],
+      "explanation": "1. `scanf(\"%d\", c)` 少了分号（编译错误），也少了取地址符 `&`（未定义行为）。\n2. `c / 5 * 9` 里 c 和 5 都是 int，做的是整数除法：37 / 5 = 7，7 × 9 + 32 = 95，而正确答案是 98.60 —— 误差就来自被舍掉的 0.4。\n3. 修法有两种：写成 `c / 5.0 * 9 + 32`（一边是 double 就整体按浮点算），或 `(double)c / 5 * 9 + 32`（先强制转换）。\n4. `printf(\"%d\\n\", f)` 用 %d 打印 double 是未定义行为，必须用 `%f`/`%.2f`。\n5. 边界：-40 是摄氏与华氏的交点，可用来快速自检。",
+      "better_approach": "把公式里的常量写成有名字的常量（`const double SCALE = 5.0;`），可读性更好，也避免以后改公式时漏掉某处。仍然只用你学过的语法。",
+      "better_approach_kps": [
+        "常量",
+        "类型转换"
+      ],
+      "_self_test": "4/4 通过"
+    },
+    {
+      "id": "Q7",
+      "title": "三位数拆分与逆序",
+      "question_type": "programming",
+      "language": "c",
+      "difficulty": 3,
+      "est_minutes": 20,
+      "is_combined": false,
+      "knowledge_points": [
+        "整数除法与取余",
+        "scanf输入",
+        "printf输出",
+        "格式占位符",
+        "变量"
+      ],
+      "required_knowledge_points": [
+        "整数除法与取余",
+        "scanf输入"
+      ],
+      "stem": "编写程序：输入一个三位正整数（例如 583），输出它的百位、十位、个位数字，三个数字之和，以及把这个数倒过来写得到的逆序数。",
+      "requirements": [
+        "用 scanf 读取整数，并检查返回值",
+        "只用 / 和 % 完成拆分，不得把数字当字符串处理",
+        "逆序数按整数输出（例如 100 的逆序数是 1，不是 001）",
+        "输出格式必须与示例完全一致"
+      ],
+      "input_format": "一行一个三位正整数 n（100 <= n <= 999）",
+      "output_format": "三行：`百位:X 十位:Y 个位:Z` / `各位数字之和:S` / `逆序数:R`",
+      "constraints": [
+        "不得使用数组、循环、字符串函数",
+        "不得使用未学过的语法"
+      ],
+      "examples": [
+        {
+          "input": "583\n",
+          "output": "百位:5 十位:8 个位:3\n各位数字之和:16\n逆序数:385\n"
+        }
+      ],
+      "edge_cases": [
+        "n = 100（十位个位都是 0，逆序数是 1）",
+        "n = 999",
+        "n 的个位是 0"
+      ],
+      "test_input": "583",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "拆位：/ 与 % 的配合",
+          "alias": "精读第 8 篇"
+        },
+        {
+          "target": "八进制、十进制和十六进制",
+          "note": "位权思想"
+        },
+        {
+          "target": "C语言",
+          "note": "算术操作符"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[整数除法与取余]]",
+        "L2": "个位 n%10；十位 n/10%10；百位 n/100",
+        "L3": "逆序数 = 个位*100 + 十位*10 + 百位"
+      },
+      "reference_solution": "#include <stdio.h>\n\nint main(void)\n{\n    int n;\n\n    if (scanf(\"%d\", &n) != 1 || n < 100 || n > 999) {\n        return 1;\n    }\n\n    int b = n / 100;          /* 百位 */\n    int s = n / 10 % 10;      /* 十位：先去掉个位，再取余 */\n    int g = n % 10;           /* 个位 */\n\n    printf(\"百位:%d 十位:%d 个位:%d\\n\", b, s, g);\n    printf(\"各位数字之和:%d\\n\", b + s + g);\n    printf(\"逆序数:%d\\n\", g * 100 + s * 10 + b);\n    return 0;\n}\n",
+      "reference_solution_language": "c",
+      "tests": [
+        {
+          "name": "示例 583",
+          "stdin": "583\n",
+          "expected_stdout": "百位:5 十位:8 个位:3\n各位数字之和:16\n逆序数:385\n"
+        },
+        {
+          "name": "边界 100",
+          "stdin": "100\n",
+          "expected_stdout": "百位:1 十位:0 个位:0\n各位数字之和:1\n逆序数:1\n"
+        },
+        {
+          "name": "最大 999",
+          "stdin": "999\n",
+          "expected_stdout": "百位:9 十位:9 个位:9\n各位数字之和:27\n逆序数:999\n"
+        },
+        {
+          "name": "个位为 0",
+          "stdin": "730\n",
+          "expected_stdout": "百位:7 十位:3 个位:0\n各位数字之和:10\n逆序数:37\n"
+        }
+      ],
+      "explanation": "1. 拆位的通用套路：`% 10` 取最低位，`/ 10` 去掉最低位；十位要先 `/10` 再 `%10`。\n2. 逆序数按位权重新组装：个位变百位（×100）、十位不变（×10）、百位变个位（×1）。\n3. 用整数输出就自动没有前导零：730 的逆序是 037，按整数打印就是 37。\n4. 边界：100 → 百位1、十位0、个位0，和为 1，逆序为 1。\n5. 复杂度 $O(1)$，只用了整除与取余。",
+      "better_approach": "如果你想练一下函数，可以把「拆位」写成三个小函数（bai/shi/ge）；不过函数你还在初始估计阶段，本题用直白写法更合适。",
+      "better_approach_kps": [
+        "整数除法与取余"
+      ],
+      "_self_test": "4/4 通过"
+    },
+    {
+      "id": "Q8",
+      "title": "字符信息分析器",
+      "question_type": "programming",
+      "language": "c",
+      "difficulty": 4,
+      "est_minutes": 22,
+      "is_combined": true,
+      "knowledge_points": [
+        "字符与ASCII",
+        "if分支",
+        "switch语句",
+        "scanf输入",
+        "关系与逻辑运算",
+        "printf输出"
+      ],
+      "required_knowledge_points": [
+        "字符与ASCII",
+        "if分支",
+        "关系与逻辑运算"
+      ],
+      "stem": "编写程序：输入一个非空白字符，输出它的字符本身、ASCII 码、大小写转换结果、对应的数值（不是数字字符时输出 -1）和字符类别。",
+      "requirements": [
+        "用 scanf(\" %c\", &ch) 读取一个非空白字符",
+        "利用大小写字母 ASCII 码差 32 完成转换，不得调用 ctype.h 里的函数",
+        "数字字符要输出它代表的整数值（'7' → 7）",
+        "类别判定用 switch 输出：大写字母 / 小写字母 / 数字字符 / 其他"
+      ],
+      "input_format": "一行一个非空白字符",
+      "output_format": "五行：`字符:X` / `ASCII:N` / `转换后:Y` / `数值:V` / `类型:T`",
+      "constraints": [
+        "不得使用 ctype.h、数组、循环、自定义函数",
+        "非字母字符的「转换后」输出它本身",
+        "非数字字符的「数值」输出 -1"
+      ],
+      "examples": [
+        {
+          "input": "A\n",
+          "output": "字符:A\nASCII:65\n转换后:a\n数值:-1\n类型:大写字母\n"
+        }
+      ],
+      "edge_cases": [
+        "输入小写字母",
+        "输入数字字符 '7'",
+        "输入符号 '*'",
+        "输入 '0'（是数字字符，值为 0，不是 -1）"
+      ],
+      "test_input": "A",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "字符与 ASCII：大小写转换",
+          "alias": "精读第 7 篇"
+        },
+        {
+          "target": "Q&A(1)",
+          "note": "字符 0 的值是 48"
+        },
+        {
+          "target": "C语言",
+          "note": "字符和 ASCII 编码、关系运算符"
+        },
+        {
+          "target": "3字母词",
+          "note": "ASCII"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[字符与ASCII]]、[[if分支]] 与 [[switch语句]]",
+        "L2": "先分四类判定，再决定转换结果与数值；类别可以用一个 int 标记，最后交给 switch 输出",
+        "L3": "if (ch>='A'&&ch<='Z') 转小写 +32；else if (ch>='a'&&ch<='z') 转大写 -32；else if (ch>='0'&&ch<='9') 数值 = ch-'0'；else 其他"
+      },
+      "reference_solution": "#include <stdio.h>\n\nint main(void)\n{\n    char ch;\n    int kind;             /* 1 大写 2 小写 3 数字 4 其他 */\n    int value = -1;\n    char conv;\n\n    if (scanf(\" %c\", &ch) != 1) {\n        return 1;\n    }\n\n    conv = ch;\n    if (ch >= 'A' && ch <= 'Z') {\n        conv = ch + 32;         /* 大写转小写：ASCII 差 32 */\n        kind = 1;\n    } else if (ch >= 'a' && ch <= 'z') {\n        conv = ch - 32;\n        kind = 2;\n    } else if (ch >= '0' && ch <= '9') {\n        value = ch - '0';       /* 字符转数值：减去 '0' 的 48 */\n        kind = 3;\n    } else {\n        kind = 4;\n    }\n\n    printf(\"字符:%c\\n\", ch);\n    printf(\"ASCII:%d\\n\", ch);\n    printf(\"转换后:%c\\n\", conv);\n    printf(\"数值:%d\\n\", value);\n\n    switch (kind) {\n        case 1: printf(\"类型:大写字母\\n\"); break;\n        case 2: printf(\"类型:小写字母\\n\"); break;\n        case 3: printf(\"类型:数字字符\\n\"); break;\n        default: printf(\"类型:其他\\n\"); break;\n    }\n    return 0;\n}\n",
+      "reference_solution_language": "c",
+      "tests": [
+        {
+          "name": "大写字母 A",
+          "stdin": "A\n",
+          "expected_stdout": "字符:A\nASCII:65\n转换后:a\n数值:-1\n类型:大写字母\n"
+        },
+        {
+          "name": "小写字母 g",
+          "stdin": "g\n",
+          "expected_stdout": "字符:g\nASCII:103\n转换后:G\n数值:-1\n类型:小写字母\n"
+        },
+        {
+          "name": "数字字符 7",
+          "stdin": "7\n",
+          "expected_stdout": "字符:7\nASCII:55\n转换后:7\n数值:7\n类型:数字字符\n"
+        },
+        {
+          "name": "数字字符 0",
+          "stdin": "0\n",
+          "expected_stdout": "字符:0\nASCII:48\n转换后:0\n数值:0\n类型:数字字符\n"
+        },
+        {
+          "name": "符号 *",
+          "stdin": "*\n",
+          "expected_stdout": "字符:*\nASCII:42\n转换后:*\n数值:-1\n类型:其他\n"
+        }
+      ],
+      "explanation": "1. `scanf(\" %c\", &ch)` 前面的空格用来吃掉上一次输入留下的换行，否则会读到空白字符。\n2. 字符在 C 里本质是小整数，所以能直接用 `>=` `<=` 比较区间；大写与小写的 ASCII 差正好是 32。\n3. `ch - '0'` 把数字字符变成它代表的数值，比写 `ch - 48` 更好读，也不依赖记住 48。\n4. 分类结果先存进 `kind`，再用 `switch` 输出文字：这样避免了在四个分支里各写一遍 printf，也顺便练了 switch 与 break。\n5. 注意 `'0'` 的数值是 0，不能和「不是数字字符」的 -1 混淆 —— 这是本题最容易错的边界。",
+      "better_approach": "把「区间判断」写成 `if (ch >= 'A' && ch <= 'Z')` 已经很清晰；如果想更省事，可以在读入后先把 conv 赋值为 ch，只在需要改的分支里覆盖它（本答案就是这么做的）。",
+      "better_approach_kps": [
+        "if分支",
+        "字符与ASCII"
+      ],
+      "_self_test": "5/5 通过"
+    },
+    {
+      "id": "Q9",
+      "title": "阶梯水费计算",
+      "question_type": "programming",
+      "language": "c",
+      "difficulty": 4,
+      "est_minutes": 24,
+      "is_combined": false,
+      "knowledge_points": [
+        "if分支",
+        "整数除法与取余",
+        "类型转换",
+        "printf输出",
+        "格式占位符"
+      ],
+      "required_knowledge_points": [
+        "if分支",
+        "类型转换"
+      ],
+      "stem": "某地水费按阶梯计价：每月 0~10 吨的部分每吨 2 元；超过 10 吨到 20 吨的部分每吨 3 元；超过 20 吨的部分每吨 5 元。编写程序，输入本月用水量（整数吨），输出应缴水费。",
+      "requirements": [
+        "用 if / else if / else 分档计算，不得使用循环",
+        "水费保留两位小数输出，格式为 `水费:XX.XX元`",
+        "说明边界值 10 吨和 20 吨分别落在哪一档",
+        "解释为什么不能写成 w * 2 或 w * 3"
+      ],
+      "input_format": "一行一个整数 w（0 <= w <= 10000）",
+      "output_format": "一行：`水费:XX.XX元`（保留两位小数）",
+      "constraints": [
+        "不得使用循环、数组、函数",
+        "分档必须是「超出部分」按更高价，不是全部按最高价"
+      ],
+      "examples": [
+        {
+          "input": "15\n",
+          "output": "水费:35.00元\n"
+        }
+      ],
+      "edge_cases": [
+        "w = 0",
+        "w = 10（刚好第一档上限）",
+        "w = 20（刚好第二档上限）",
+        "w = 21（刚过第三档门槛）"
+      ],
+      "test_input": "15",
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "if / else if 多分支与边界",
+          "alias": "精读第 9 篇"
+        },
+        {
+          "target": "C语言",
+          "note": "关系运算符、分支"
+        },
+        {
+          "target": "%f",
+          "note": "保留两位小数"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[if分支]] 与分段计费",
+        "L2": "从高档往低档判断更简单：先看是否超过 20，再看是否超过 10",
+        "L3": "w>20：10*2 + 10*3 + (w-20)*5；w>10：10*2 + (w-10)*3；否则 w*2"
+      },
+      "reference_solution": "#include <stdio.h>\n\nint main(void)\n{\n    int w;\n    double fee;\n\n    if (scanf(\"%d\", &w) != 1 || w < 0) {\n        return 1;\n    }\n\n    if (w > 20) {\n        fee = 10 * 2 + 10 * 3 + (w - 20) * 5;   /* 三档分别计价再相加 */\n    } else if (w > 10) {\n        fee = 10 * 2 + (w - 10) * 3;\n    } else {\n        fee = w * 2;\n    }\n\n    printf(\"水费:%.2f元\\n\", fee);\n    return 0;\n}\n",
+      "reference_solution_language": "c",
+      "tests": [
+        {
+          "name": "15 吨",
+          "stdin": "15\n",
+          "expected_stdout": "水费:35.00元\n"
+        },
+        {
+          "name": "8 吨",
+          "stdin": "8\n",
+          "expected_stdout": "水费:16.00元\n"
+        },
+        {
+          "name": "刚好 10 吨",
+          "stdin": "10\n",
+          "expected_stdout": "水费:20.00元\n"
+        },
+        {
+          "name": "刚好 20 吨",
+          "stdin": "20\n",
+          "expected_stdout": "水费:50.00元\n"
+        },
+        {
+          "name": "21 吨",
+          "stdin": "21\n",
+          "expected_stdout": "水费:55.00元\n"
+        },
+        {
+          "name": "0 吨",
+          "stdin": "0\n",
+          "expected_stdout": "水费:0.00元\n"
+        }
+      ],
+      "explanation": "1. 阶梯计价的关键是**超出部分**才按高价，不能整批按最高档算。\n2. 从高档往低档判断（先 `w > 20`，再 `w > 10`，否则第一档），这样每个分支里的公式都很直白，也不会漏掉边界。\n3. 边界归属：10 吨落在第一档（`w > 10` 不成立），20 吨落在第二档（`w > 20` 不成立）。\n4. `fee` 用 double，整数乘法的结果赋给 double 会自动转换，`%.2f` 负责补两位小数。\n5. 自检：21 吨 = 20 + 30 + 5 = 55 元，比 20 吨多 5 元，正好是第三档单价。",
+      "better_approach": "把三个单价写成 `const int P1 = 2, P2 = 3, P3 = 5;`，以后调价只改一处；这属于「用常量代替魔法数字」。",
+      "better_approach_kps": [
+        "常量",
+        "if分支"
+      ],
+      "_self_test": "6/6 通过"
+    },
+    {
+      "id": "Q10",
+      "title": "综合挑战：简易单位换算器",
+      "question_type": "comprehensive",
+      "language": "c",
+      "difficulty": 5,
+      "est_minutes": 30,
+      "is_combined": true,
+      "knowledge_points": [
+        "switch语句",
+        "if分支",
+        "整数除法与取余",
+        "类型转换",
+        "格式占位符",
+        "scanf输入",
+        "printf输出"
+      ],
+      "required_knowledge_points": [
+        "switch语句",
+        "整数除法与取余",
+        "类型转换",
+        "格式占位符"
+      ],
+      "stem": "编写一个简易单位换算器：第一行输入功能编号，第二行输入数值，按编号完成对应换算并输出。1 = 秒数换算成 时:分:秒；2 = 摄氏温度换算成华氏温度（保留两位小数）；3 = 厘米换算成 X米Y厘米；其它编号输出「非法选项」。",
+      "requirements": [
+        "必须用 switch 实现分支，每个 case 都要有 break",
+        "时间用 %02d:%02d:%02d 格式输出（不足两位补 0）",
+        "华氏温度用 F = C ÷ 5 × 9 + 32 计算，保留两位小数，注意整数除法陷阱",
+        "厘米换算用整除与取余拆成米和厘米",
+        "非法编号走 default 分支",
+        "检查 scanf 的返回值"
+      ],
+      "input_format": "一行两个整数：功能编号 choice 和数值 value（也可以分两行输入）",
+      "output_format": "一行结果，格式随 choice 变化（见示例）",
+      "constraints": [
+        "不得使用数组、循环、自定义函数",
+        "不得使用 ctype.h 等未学头文件（stdio.h 除外）",
+        "必须使用 switch 而不是 if / else if 链"
+      ],
+      "examples": [
+        {
+          "input": "1 3725\n",
+          "output": "01:02:05\n"
+        },
+        {
+          "input": "2 37\n",
+          "output": "98.60\n"
+        },
+        {
+          "input": "3 185\n",
+          "output": "1米85厘米\n"
+        }
+      ],
+      "edge_cases": [
+        "choice 为 0 或 9（非法）",
+        "value = 0（三种功能都要能正确处理）",
+        "value = 59（不足 1 分）",
+        "value = 3600（整小时）",
+        "value = 100（正好 1 米）"
+      ],
+      "test_input": "1 3725",
+      "self_check_questions": [
+        "整数除法是否影响华氏温度的结果？你是怎么避免的？",
+        "switch 里如果漏掉一个 break 会发生什么？",
+        "%02d 里的 0 和 2 分别起什么作用？"
+      ],
+      "self_check_answers": [
+        "会。value / 5 是整数除法，必须写成 value / 5.0 * 9 + 32（或先强制转换成 double），否则 37 会算成 95 而不是 98.60。",
+        "会「贯穿」到下一个 case 继续执行，输出多行错误结果；default 分支的 break 也建议写上。",
+        "2 表示最少输出 2 位，0 表示不足时用 0 补齐（用空格则是 ' 1'，用 0 才是 '01'）。"
+      ],
+      "related_notes": [
+        {
+          "target": "11月1日代码精读",
+          "note": "秒数转时分秒与 %02d",
+          "alias": "精读第 10 篇"
+        },
+        {
+          "target": "%f",
+          "note": "宽度与精度"
+        },
+        {
+          "target": "C语言",
+          "note": "switch 语句、算术操作符"
+        },
+        {
+          "target": "数据类型",
+          "note": "整型与浮点型"
+        }
+      ],
+      "hints": {
+        "L1": "考察 [[switch语句]]、[[整数除法与取余]]、[[类型转换]] 与 [[格式占位符]]",
+        "L2": "switch 的每个 case 里各自算各自的，注意时间要用整除+取余拆三段",
+        "L3": "case 1: %02d:%02d:%02d ← v/3600, v%3600/60, v%60；case 2: %.2f ← v/5.0*9+32；case 3: %d米%d厘米 ← v/100, v%100；default: 非法选项"
+      },
+      "reference_solution": "#include <stdio.h>\n\nint main(void)\n{\n    int choice, value;\n\n    if (scanf(\"%d %d\", &choice, &value) != 2) {\n        return 1;\n    }\n\n    switch (choice) {\n        case 1:                                     /* 秒 -> 时:分:秒 */\n            printf(\"%02d:%02d:%02d\\n\", value / 3600, value % 3600 / 60, value % 60);\n            break;\n        case 2:                                     /* 摄氏 -> 华氏 */\n            printf(\"%.2f\\n\", value / 5.0 * 9 + 32);\n            break;\n        case 3:                                     /* 厘米 -> 米 + 厘米 */\n            printf(\"%d米%d厘米\\n\", value / 100, value % 100);\n            break;\n        default:\n            printf(\"非法选项\\n\");\n            break;\n    }\n    return 0;\n}\n",
+      "reference_solution_language": "c",
+      "tests": [
+        {
+          "name": "秒转时分秒",
+          "stdin": "1 3725\n",
+          "expected_stdout": "01:02:05\n"
+        },
+        {
+          "name": "整小时",
+          "stdin": "1 3600\n",
+          "expected_stdout": "01:00:00\n"
+        },
+        {
+          "name": "不足一分",
+          "stdin": "1 59\n",
+          "expected_stdout": "00:00:59\n"
+        },
+        {
+          "name": "摄氏转华氏",
+          "stdin": "2 37\n",
+          "expected_stdout": "98.60\n"
+        },
+        {
+          "name": "冰点",
+          "stdin": "2 0\n",
+          "expected_stdout": "32.00\n"
+        },
+        {
+          "name": "厘米换算",
+          "stdin": "3 185\n",
+          "expected_stdout": "1米85厘米\n"
+        },
+        {
+          "name": "正好一米",
+          "stdin": "3 100\n",
+          "expected_stdout": "1米0厘米\n"
+        },
+        {
+          "name": "非法选项",
+          "stdin": "9 1\n",
+          "expected_stdout": "非法选项\n"
+        }
+      ],
+      "explanation": "1. 三个功能互斥，用 switch 比 if/else if 链更清楚：case 值必须是整型常量表达式。\n2. 时间换算的通用套路是「先取余去掉大单位，再整除换成小单位」：`value % 3600 / 60` 因为 % 与 / 同级、从左到右算，等价于 `(value % 3600) / 60`。\n3. `%02d` 的 2 是最小宽度、0 是填充字符，这样 1 小时 2 分 5 秒才会打成 01:02:05。\n4. 华氏温度必须避开整数除法：`value / 5.0 * 9 + 32`。\n5. default 分支处理非法输入，是「输入健壮性」的基本功；每个 case 都要 break，否则会贯穿执行下一个 case。\n6. 自检：3600 秒 → 01:00:00；100 厘米 → 1米0厘米（0 也要打出来，不能省略）。",
+      "better_approach": "把每个 case 里的算式先算进一个变量再 printf，可读性会更好，也便于以后加校验（比如负数秒数）。仍然只用你学过的语法。",
+      "better_approach_kps": [
+        "变量",
+        "switch语句"
+      ],
+      "_self_test": "8/8 通过"
+    }
+  ]
+}
